@@ -267,7 +267,7 @@ h2 em::after{content:"";position:absolute;left:0;bottom:.05em;width:100%;height:
 .svc-dots button{width:8px;height:8px;padding:0;border-radius:50%;background:var(--line-2);border:none;cursor:pointer;transition:.3s var(--e)}
 .svc-dots button.on{width:26px;border-radius:5px;background:var(--blue)}
 .svc-track{display:flex;gap:24px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
-  -webkit-overflow-scrolling:touch;scrollbar-width:none;padding:4px 36px 30px}
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;padding:4px max(36px,calc((100vw - 1280px)/2 + 36px)) 30px}
 .svc-track::-webkit-scrollbar{display:none}
 .svc{scroll-snap-align:start;flex:0 0 min(900px,84vw);display:grid;grid-template-columns:1fr 1fr;align-items:stretch;
   gap:0;border:1px solid var(--line);background:var(--bg-2)}
