@@ -253,19 +253,31 @@ h2 em::after{content:"";position:absolute;left:0;bottom:.05em;width:100%;height:
 .feed.pvw .cam::after{content:" · PVW";color:#d4900a}
 @media(max-width:900px){.feeds{grid-template-columns:repeat(2,1fr)}.feed,.feed.big{grid-column:span 1;grid-row:auto;aspect-ratio:16/9}}
 
-/* ───────── SERVICES (CATALOGUE) ───────── */
+/* ───────── SERVICES (CAROUSEL) ───────── */
 .services{}
-.svc-list{display:flex;flex-direction:column;gap:0}
-.svc{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:0;border-top:1px solid var(--line)}
-.svc:last-child{border-bottom:1px solid var(--line)}
-.svc.rev .svc-img{order:2}.svc.rev .svc-body{order:1}
+.svc-nav{display:flex;align-items:center;justify-content:space-between;margin:-28px 0 32px}
+.svc-arrows{display:flex;gap:10px}
+.svc-arrow{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex:none;
+  background:rgba(255,255,255,.04);border:1px solid var(--line-2);color:var(--ink);cursor:pointer;
+  font-family:var(--mono);font-size:16px;line-height:1;transition:.25s var(--e)}
+.svc-arrow:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.svc-arrow:disabled{opacity:.28;cursor:default}
+.svc-arrow:disabled:hover{border-color:var(--line-2);background:rgba(255,255,255,.04)}
+.svc-dots{display:flex;align-items:center;gap:9px}
+.svc-dots button{width:8px;height:8px;padding:0;border-radius:50%;background:var(--line-2);border:none;cursor:pointer;transition:.3s var(--e)}
+.svc-dots button.on{width:26px;border-radius:5px;background:var(--blue)}
+.svc-track{display:flex;gap:24px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;padding:4px 36px 30px}
+.svc-track::-webkit-scrollbar{display:none}
+.svc{scroll-snap-align:start;flex:0 0 min(900px,84vw);display:grid;grid-template-columns:1fr 1fr;align-items:stretch;
+  gap:0;border:1px solid var(--line);background:var(--bg-2)}
 .svc-img{position:relative;aspect-ratio:4/3;overflow:hidden}
 .svc-img img{width:100%;height:100%;object-fit:cover;filter:grayscale(.3) contrast(1.05);transition:filter .5s var(--e),transform .5s var(--e)}
 .svc-img::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(8,9,12,.35) 0%,rgba(8,9,12,.1) 50%,rgba(90,133,184,.15) 100%)}
 .svc-img .sig-tag{position:absolute;bottom:14px;left:14px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
   color:#fff;background:rgba(8,9,12,.72);padding:5px 10px;border:1px solid var(--line);z-index:2}
 .svc:hover .svc-img img{filter:grayscale(0) contrast(1.05);transform:scale(1.03)}
-.svc-body{padding:52px 56px}
+.svc-body{padding:52px 56px;display:flex;flex-direction:column;justify-content:center}
 .svc-body .ix{font-family:var(--mono);font-size:11px;color:var(--blue);font-weight:700;letter-spacing:.1em;display:block;margin-bottom:14px}
 .svc-body h3{font-family:var(--disp);font-weight:800;text-transform:uppercase;font-size:clamp(22px,2.6vw,36px);letter-spacing:-.01em;line-height:1;margin-bottom:16px}
 .svc-body .tl{font-size:17px;font-weight:700;color:var(--ink);line-height:1.5;margin-bottom:12px}
@@ -274,10 +286,11 @@ h2 em::after{content:"";position:absolute;left:0;bottom:.05em;width:100%;height:
   text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:gap .3s var(--e),color .2s}
 .svc-body .svc-cta:hover{gap:14px;color:#fff}
 @media(max-width:900px){
-  .svc{grid-template-columns:1fr}
-  .svc.rev .svc-img{order:0}.svc.rev .svc-body{order:1}
+  .svc-nav{margin-top:-16px}
+  .svc-track{padding:4px 20px 26px}
+  .svc{grid-template-columns:1fr;flex-basis:88vw}
   .svc-img{aspect-ratio:16/9}
-  .svc-body{padding:36px 28px}
+  .svc-body{padding:30px 26px}
 }
 
 /* ───────── SIGNAL FLOW ───────── */
@@ -473,8 +486,15 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
       <span class="eyebrow" data-es="Nuestros Servicios" data-en="Our Services">Nuestros Servicios</span>
       <h2 data-es='El <em>espectro</em> completo del broadcast.' data-en='The full <em>spectrum</em> of broadcast.'>El <em>espectro</em> completo del broadcast.</h2>
     </div>
+    <div class="svc-nav reveal">
+      <div class="svc-arrows">
+        <button type="button" class="svc-arrow" id="svcPrev" aria-label="Previous">←</button>
+        <button type="button" class="svc-arrow" id="svcNext" aria-label="Next">→</button>
+      </div>
+      <div class="svc-dots" id="svcDots"></div>
+    </div>
   </div>
-  <div class="svc-list">
+  <div class="svc-track" id="svcTrack">
 
     <!-- 01 SPORT -->
     <div class="svc reveal">
@@ -492,7 +512,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
     </div>
 
     <!-- 02 CONNECT -->
-    <div class="svc rev reveal">
+    <div class="svc reveal">
       <div class="svc-img">
         <img src="https://images.pexels.com/photos/6325002/pexels-photo-6325002.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop" alt="Prisma Connect">
         <span class="sig-tag">CH 02 · SIGNAL</span>
@@ -522,7 +542,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
     </div>
 
     <!-- 04 CONTENT -->
-    <div class="svc rev reveal">
+    <div class="svc reveal">
       <div class="svc-img">
         <img src="https://images.pexels.com/photos/668296/pexels-photo-668296.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop" alt="Prisma Content">
         <span class="sig-tag">CH 04 · SIGNAL</span>
@@ -552,7 +572,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
     </div>
 
     <!-- 06 PRODUCTION -->
-    <div class="svc rev reveal">
+    <div class="svc reveal">
       <div class="svc-img">
         <img src="https://images.pexels.com/photos/159400/television-camera-men-outdoors-ballgame-159400.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop" alt="Prisma Production">
         <span class="sig-tag">CH 06 · SIGNAL</span>
@@ -582,7 +602,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
     </div>
 
     <!-- 08 MEDIAHUB -->
-    <div class="svc rev reveal">
+    <div class="svc reveal">
       <div class="svc-img">
         <img src="https://images.pexels.com/photos/6466141/pexels-photo-6466141.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop" alt="Prisma MediaHub">
         <span class="sig-tag">CH 08 · SIGNAL</span>
@@ -675,6 +695,41 @@ addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>30));
 // reveal
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// services carousel
+(()=>{
+  const track=document.getElementById('svcTrack');
+  if(!track)return;
+  const slides=[...track.children];
+  const prev=document.getElementById('svcPrev');
+  const next=document.getElementById('svcNext');
+  const dotsWrap=document.getElementById('svcDots');
+  slides.forEach((_,i)=>{
+    const b=document.createElement('button');
+    b.type='button';b.setAttribute('aria-label','Go to slide '+(i+1));
+    b.addEventListener('click',()=>slides[i].scrollIntoView({behavior:'smooth',inline:'start',block:'nearest'}));
+    dotsWrap.appendChild(b);
+  });
+  const dots=[...dotsWrap.children];
+  const setActive=()=>{
+    const trackRect=track.getBoundingClientRect();
+    let idx=0,best=Infinity;
+    slides.forEach((s,i)=>{
+      const d=Math.abs(s.getBoundingClientRect().left-trackRect.left);
+      if(d<best){best=d;idx=i}
+    });
+    dots.forEach((d,i)=>d.classList.toggle('on',i===idx));
+    prev.disabled=track.scrollLeft<=4;
+    next.disabled=track.scrollLeft>=track.scrollWidth-track.clientWidth-4;
+  };
+  const step=()=>slides[0].getBoundingClientRect().width+24;
+  prev.addEventListener('click',()=>track.scrollBy({left:-step(),behavior:'smooth'}));
+  next.addEventListener('click',()=>track.scrollBy({left:step(),behavior:'smooth'}));
+  let raf;
+  track.addEventListener('scroll',()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(setActive)},{passive:true});
+  addEventListener('resize',setActive);
+  setActive();
+})();
 
 // timecode @24fps
 const tc=document.getElementById('tc');const pad=n=>String(n).padStart(2,'0');let f=0;
