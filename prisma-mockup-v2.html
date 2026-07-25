@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PRISMA — Broadcast &amp; Media · LIVE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800;900&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08090c;
+  --bg-2:#0c0e13;
+  --surface:#11141b;
+  --surface-2:#171b24;
+  --line:rgba(255,255,255,.09);
+  --line-2:rgba(255,255,255,.18);
+  --ink:#f4f3ef;
+  --ink-soft:#c4c6cd;
+  --muted:#797d89;
+  --muted-2:#52566180;
+  --red:#ff2436;
+  --red-soft:#ff5663;
+  --red-glow:rgba(255,36,54,.55);
+  --spectrum:linear-gradient(100deg,#ff647d,#ffae5e 18%,#ffe45e 34%,#6fe6a0 52%,#5cd2ff 70%,#7a82ff 86%,#cf6bff);
+  --disp:"Archivo Expanded",sans-serif;
+  --sans:"Archivo",-apple-system,sans-serif;
+  --mono:"JetBrains Mono",monospace;
+  --e:cubic-bezier(.22,.61,.36,1);
+  --e2:cubic-bezier(.65,0,.35,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--red);color:#fff}
+img,video{display:block}
+
+/* overlays */
+.scan{position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0,rgba(0,0,0,.18) 1px,transparent 2px,transparent 3px);mix-blend-mode:multiply}
+.grain{position:fixed;inset:0;z-index:91;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.wrap{max-width:1280px;margin:0 auto;padding:0 36px;position:relative;z-index:2}
+@media(max-width:640px){.wrap{padding:0 20px}}
+.mono{font-family:var(--mono)}
+
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block;
+  box-shadow:0 0 0 0 var(--red-glow);animation:blink 1.6s infinite}
+@keyframes blink{0%,100%{box-shadow:0 0 0 0 var(--red-glow);opacity:1}50%{box-shadow:0 0 0 7px transparent;opacity:.55}}
+
+/* ───────── NAV ───────── */
+header{position:fixed;top:0;left:0;right:0;z-index:80;transition:.4s var(--e)}
+header.scrolled{background:rgba(8,9,12,.82);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:74px}
+.brand{display:flex;align-items:center;gap:13px;text-decoration:none;color:var(--ink)}
+.mark{width:30px;height:30px;flex:none}
+.bt{display:flex;flex-direction:column;line-height:1}
+.bt b{font-family:var(--disp);font-weight:800;letter-spacing:.14em;font-size:16px}
+.bt span{font-family:var(--mono);font-size:8px;letter-spacing:.34em;color:var(--muted);margin-top:5px}
+.nav-links{display:flex;align-items:center;gap:34px}
+.nav-links a{color:var(--ink-soft);text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.02em;
+  text-transform:uppercase;position:relative;transition:color .2s;font-family:var(--mono)}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-7px;height:2px;width:0;background:var(--red);transition:width .3s var(--e)}
+.nav-links a:hover{color:#fff}.nav-links a:hover::after{width:100%}
+.nav-right{display:flex;align-items:center;gap:20px}
+.lang{display:flex;font-family:var(--mono);font-size:12px;align-items:center}
+.lang button{background:none;border:none;color:var(--muted);cursor:pointer;font:inherit;padding:4px 5px}
+.lang button.on{color:#fff}.lang i{color:var(--muted);font-style:normal}
+.btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;padding:13px 22px;text-decoration:none;cursor:pointer;border:none;
+  transition:.25s var(--e);clip-path:polygon(0 0,100% 0,100% 100%,8px 100%,0 calc(100% - 8px))}
+.btn-pri{background:var(--red);color:#fff;position:relative}
+.btn-pri:hover{transform:translateY(-2px);box-shadow:0 10px 30px var(--red-glow);background:#ff3445}
+.btn-ghost{background:rgba(255,255,255,.04);color:var(--ink);border:1px solid var(--line-2)}
+.btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.burger{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:6px}
+.burger span{width:22px;height:2px;background:var(--ink);display:block}
+@media(max-width:960px){.nav-links{display:none}.burger{display:flex}.nav-right .btn{display:none}}
+
+/* ───────── HERO ───────── */
+.hero{position:relative;height:100vh;min-height:660px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.hero-media{position:absolute;inset:0;z-index:0}
+.hero-media video,.hero-media img{width:100%;height:100%;object-fit:cover}
+.hero-media::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(8,9,12,.55) 0%,rgba(8,9,12,.2) 35%,rgba(8,9,12,.55) 70%,var(--bg) 100%),
+  linear-gradient(90deg,rgba(8,9,12,.75),transparent 55%)}
+.hero-media .tint{position:absolute;inset:0;background:rgba(255,36,54,.05);mix-blend-mode:overlay}
+
+/* viewfinder corners */
+.vf{position:absolute;z-index:5;width:26px;height:26px;border:2px solid rgba(255,255,255,.6)}
+.vf.tl{top:96px;left:36px;border-right:0;border-bottom:0}
+.vf.tr{top:96px;right:36px;border-left:0;border-bottom:0}
+.vf.bl{bottom:120px;left:36px;border-right:0;border-top:0}
+.vf.br{bottom:120px;right:36px;border-left:0;border-top:0}
+
+/* HUD top row */
+.hud-top{position:absolute;top:94px;left:0;right:0;z-index:6;display:flex;justify-content:space-between;
+  align-items:center;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;padding:0 74px}
+.hud-live{display:flex;align-items:center;gap:10px;background:rgba(255,36,54,.14);border:1px solid var(--red);
+  padding:6px 12px;color:#fff;font-weight:700}
+.hud-tc{display:flex;align-items:center;gap:14px;color:var(--ink-soft)}
+.hud-tc #tc{color:#fff;background:rgba(0,0,0,.35);padding:5px 10px;border:1px solid var(--line)}
+.hud-tc .rec{color:var(--red);display:flex;align-items:center;gap:6px}
+@media(max-width:760px){.hud-top{padding:0 26px;font-size:10px}.hud-tc span.hide{display:none}}
+
+/* lower third */
+.lower{position:relative;z-index:6;padding-bottom:64px}
+.kick{display:inline-flex;align-items:center;gap:11px;font-family:var(--mono);font-size:12px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:#fff;margin-bottom:26px;
+  border-left:3px solid var(--red);padding:4px 0 4px 14px}
+.hero h1{font-family:var(--disp);font-weight:900;text-transform:uppercase;line-height:.92;letter-spacing:-.01em;
+  font-size:clamp(40px,8vw,108px);max-width:14ch;text-shadow:0 6px 40px rgba(0,0,0,.5)}
+.hero h1 em{font-style:normal;color:var(--red);position:relative}
+.hero h1 em::after{content:"";position:absolute;left:0;bottom:.08em;width:100%;height:.07em;background:var(--red)}
+.hero .sub{font-size:17px;color:var(--ink-soft);max-width:520px;margin:28px 0 36px;font-weight:500}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+
+/* telemetry ticker */
+.ticker{position:relative;z-index:7;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:rgba(8,9,12,.9);overflow:hidden;height:46px;display:flex;align-items:center}
+.ticker .tk-tag{background:var(--red);color:#fff;font-family:var(--mono);font-weight:700;font-size:11px;
+  letter-spacing:.14em;padding:0 16px;height:100%;display:flex;align-items:center;flex:none;z-index:2;
+  clip-path:polygon(0 0,100% 0,calc(100% - 12px) 100%,0 100%)}
+.tk-track{display:flex;gap:0;white-space:nowrap;animation:tk 26s linear infinite}
+.tk-track span{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--ink-soft);
+  padding:0 26px;display:flex;align-items:center;gap:9px}
+.tk-track span b{color:#fff}
+.tk-track span::before{content:"";width:5px;height:5px;background:var(--red);border-radius:50%}
+@keyframes tk{to{transform:translateX(-50%)}}
+
+/* ───────── SECTION SHELL ───────── */
+section{position:relative;z-index:2}
+.pad{padding:130px 0}
+.eyebrow{display:inline-flex;align-items:center;gap:11px;font-family:var(--mono);font-size:11.5px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:22px}
+.eyebrow::before{content:"//";color:var(--red);font-weight:700}
+h2{font-family:var(--disp);font-weight:800;text-transform:uppercase;font-size:clamp(30px,4.6vw,58px);
+  line-height:1;letter-spacing:-.01em}
+h2 em{font-style:normal;color:#fff;position:relative}
+h2 em::after{content:"";position:absolute;left:0;bottom:.05em;width:100%;height:2px;background:var(--red)}
+.sec-head{max-width:760px;margin-bottom:60px}
+
+/* about */
+.about{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center}
+.about p{color:var(--ink-soft);font-size:16.5px;margin-bottom:22px;font-weight:500;line-height:1.75}
+.about-media{position:relative;aspect-ratio:4/5;overflow:hidden;border:1px solid var(--line)}
+.about-media img{width:100%;height:100%;object-fit:cover;filter:grayscale(.3) contrast(1.05)}
+.about-media::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,transparent 40%,rgba(255,36,54,.22))}
+.about-media .tag-tl,.about-media .tag-br{position:absolute;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  color:#fff;background:rgba(8,9,12,.7);padding:5px 9px;border:1px solid var(--line)}
+.about-media .tag-tl{top:14px;left:14px}.about-media .tag-br{bottom:14px;right:14px;color:var(--red)}
+.stats{display:flex;gap:14px;margin-top:42px;flex-wrap:wrap}
+.stat{flex:1;min-width:120px;border:1px solid var(--line);padding:22px 20px;background:var(--surface);
+  clip-path:polygon(0 0,100% 0,100% 100%,12px 100%,0 calc(100% - 12px))}
+.stat .n{font-family:var(--disp);font-weight:800;font-size:40px;line-height:1;color:#fff}
+.stat .n.red{color:var(--red)}
+.stat .l{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:12px}
+@media(max-width:900px){.about{grid-template-columns:1fr;gap:44px}.about-media{aspect-ratio:16/10}}
+
+/* ───────── CONTROL ROOM / MULTI-FEED ───────── */
+.control{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.cr-bar{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:30px;flex-wrap:wrap;gap:16px}
+.cr-now{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--ink-soft);
+  border:1px solid var(--line);padding:9px 14px;background:var(--surface)}
+.cr-now b{color:var(--red)}
+.feeds{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.feed{grid-column:span 2;aspect-ratio:16/9;position:relative;overflow:hidden;border:1px solid var(--line);
+  background:var(--surface);cursor:pointer;transition:.3s var(--e)}
+.feed.big{grid-column:span 4;grid-row:span 2;aspect-ratio:auto}
+.feed video,.feed img{width:100%;height:100%;object-fit:cover;filter:saturate(1.05)}
+.feed .fx{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),transparent 30%,transparent 70%,rgba(0,0,0,.5))}
+.feed .cam{position:absolute;top:8px;left:8px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:#fff;
+  background:rgba(0,0,0,.55);padding:3px 7px;display:flex;align-items:center;gap:6px}
+.feed .tally{position:absolute;top:8px;right:8px;width:9px;height:9px;border-radius:50%;background:#3a3d46;border:1px solid rgba(255,255,255,.3)}
+.feed .lbl{position:absolute;bottom:8px;left:8px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--ink-soft)}
+.feed:hover{border-color:var(--line-2);transform:translateY(-2px)}
+.feed.pgm{border-color:var(--red);box-shadow:0 0 0 1px var(--red),0 12px 36px var(--red-glow)}
+.feed.pgm .tally{background:var(--red);box-shadow:0 0 8px var(--red);animation:blink 1.6s infinite}
+.feed.pgm .cam{background:var(--red)}
+.feed.pgm .cam::after{content:" · PGM"}
+/* css feeds */
+.fwave{position:absolute;inset:0;display:flex;align-items:flex-end;gap:3px;padding:18px}
+.fwave i{flex:1;background:linear-gradient(var(--red-soft),var(--red));animation:wv 1.1s var(--e2) infinite alternate;border-radius:1px}
+@keyframes wv{to{height:90%}}
+.fscope{position:absolute;inset:0;display:grid;place-items:center}
+.fscope .ring{width:62%;aspect-ratio:1;border-radius:50%;border:1px solid var(--line-2);position:relative}
+.fscope .ring::before{content:"";position:absolute;inset:-1px;border-radius:50%;
+  background:conic-gradient(from 0deg,transparent,var(--red),transparent 60%);-webkit-mask:radial-gradient(closest-side,transparent 92%,#000 93%);mask:radial-gradient(closest-side,transparent 92%,#000 93%);animation:spin 3s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:900px){.feeds{grid-template-columns:repeat(2,1fr)}.feed,.feed.big{grid-column:span 1;grid-row:auto;aspect-ratio:16/9}}
+
+/* ───────── SERVICES (CHANNELS) ───────── */
+.services{}
+.chs{display:grid;grid-template-columns:repeat(12,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.ch{grid-column:span 4;background:var(--bg);padding:34px 30px;position:relative;overflow:hidden;cursor:pointer;
+  min-height:240px;display:flex;flex-direction:column;justify-content:space-between;transition:.35s var(--e)}
+.ch.wide{grid-column:span 6}
+.ch::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red);transform:scaleY(0);transform-origin:top;transition:transform .4s var(--e)}
+.ch:hover{background:var(--surface)}
+.ch:hover::before{transform:scaleY(1)}
+.ch .ix{font-family:var(--mono);font-size:11px;color:var(--red);font-weight:700;letter-spacing:.06em}
+.ch h3{font-family:var(--disp);font-weight:700;text-transform:uppercase;font-size:22px;letter-spacing:-.01em;margin:14px 0 12px}
+.ch p{color:var(--muted);font-size:14px;line-height:1.6;font-weight:500}
+.ch .go{margin-top:18px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-soft);
+  display:inline-flex;align-items:center;gap:8px;transition:gap .3s}
+.ch:hover .go{gap:14px;color:#fff}
+@media(max-width:1000px){.ch,.ch.wide{grid-column:span 6}}
+@media(max-width:620px){.ch,.ch.wide{grid-column:span 12}}
+
+/* ───────── SIGNAL FLOW ───────── */
+.flow{background:var(--bg-2);border-top:1px solid var(--line)}
+.flow-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:center}
+.flow p{color:var(--ink-soft);font-size:16.5px;font-weight:500;line-height:1.75;margin:22px 0 30px}
+.pipe{display:flex;flex-direction:column;gap:0;position:relative}
+.pipe::before{content:"";position:absolute;left:23px;top:24px;bottom:24px;width:2px;
+  background:linear-gradient(var(--line),var(--line));}
+.pipe .sig{position:absolute;left:23px;top:24px;width:2px;height:60px;background:linear-gradient(var(--red),transparent);
+  animation:sig 3s var(--e2) infinite}
+@keyframes sig{0%{top:24px;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:calc(100% - 80px);opacity:0}}
+.node{display:flex;align-items:center;gap:20px;padding:18px 0;position:relative;z-index:2}
+.node .dot{width:48px;height:48px;flex:none;border-radius:50%;border:1px solid var(--line-2);background:var(--surface);
+  display:grid;place-items:center;font-family:var(--mono);font-size:13px;color:#fff;font-weight:700}
+.node:hover .dot{border-color:var(--red);box-shadow:0 0 18px var(--red-glow);color:var(--red)}
+.node h4{font-family:var(--disp);font-weight:700;text-transform:uppercase;font-size:17px;letter-spacing:-.01em}
+.node p{margin:4px 0 0;font-size:13.5px;color:var(--muted);font-weight:500;line-height:1.5}
+@media(max-width:900px){.flow-grid{grid-template-columns:1fr;gap:40px}}
+
+/* ───────── CONTACT ───────── */
+.contact{border-top:1px solid var(--line)}
+.cg{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px}
+.cg-l p{color:var(--ink-soft);font-size:16.5px;max-width:380px;margin:22px 0 36px;font-weight:500}
+.cinfo a{display:flex;align-items:center;gap:13px;color:var(--ink-soft);text-decoration:none;font-size:14px;
+  font-family:var(--mono);margin-bottom:16px;transition:color .2s}
+.cinfo a:hover{color:#fff}.cinfo .ic{width:34px;height:34px;border:1px solid var(--line-2);display:grid;place-items:center;flex:none}
+.form{display:grid;gap:16px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.field input,.field textarea{width:100%;background:var(--surface);border:1px solid var(--line);
+  padding:14px 15px;color:var(--ink);font-family:var(--sans);font-size:15px;font-weight:500;transition:.2s}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--red);background:var(--surface-2)}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted)}
+.field textarea{resize:vertical;min-height:120px}
+.form .btn-pri{justify-content:center;margin-top:4px;padding:16px}
+@media(max-width:900px){.cg{grid-template-columns:1fr;gap:40px}.row{grid-template-columns:1fr}}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-2)}
+.ft{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:50px}
+.ft-b{max-width:300px}.ft-b p{color:var(--muted);font-size:13.5px;margin-top:18px;font-weight:500}
+.fcols{display:flex;gap:60px;flex-wrap:wrap}
+.fcol h5{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:16px}
+.fcol a{display:block;color:var(--ink-soft);text-decoration:none;font-size:13.5px;margin-bottom:10px;transition:.2s;font-weight:500}
+.fcol a:hover{color:#fff}
+.fbot{display:flex;justify-content:space-between;padding-top:26px;border-top:1px solid var(--line);flex-wrap:wrap;gap:12px}
+.fbot p{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted)}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(30px);transition:.85s var(--e)}
+.reveal.in{opacity:1;transform:none}
+
+/* mobile menu */
+.mm{position:fixed;inset:0;z-index:95;background:rgba(8,9,12,.98);display:flex;flex-direction:column;
+  justify-content:center;align-items:center;gap:26px;opacity:0;pointer-events:none;transition:.35s}
+.mm.open{opacity:1;pointer-events:auto}
+.mm a{color:#fff;text-decoration:none;font-family:var(--disp);font-weight:800;text-transform:uppercase;font-size:30px}
+.mm .x{position:absolute;top:24px;right:24px;background:none;border:none;color:#fff;font-size:30px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="scan"></div>
+<div class="grain"></div>
+
+<!-- NAV -->
+<header id="hdr">
+  <div class="wrap nav">
+    <a href="#" class="brand">
+      <svg class="mark" viewBox="0 0 40 40" fill="none">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="40" y2="40">
+          <stop offset="0" stop-color="#5cd2ff"/><stop offset=".5" stop-color="#7a82ff"/><stop offset="1" stop-color="#cf6bff"/>
+        </linearGradient></defs>
+        <path d="M20 3 L36 34 L4 34 Z" stroke="url(#g)" stroke-width="1.7"/>
+        <path d="M2 19 L20 19" stroke="#fff" stroke-width="1.5"/>
+        <path d="M20 19 L38 11" stroke="#ff647d" stroke-width="1.3"/>
+        <path d="M20 19 L38 19" stroke="#6fe6a0" stroke-width="1.3"/>
+        <path d="M20 19 L38 27" stroke="#7a82ff" stroke-width="1.3"/>
+      </svg>
+      <span class="bt"><b>PRISMA</b><span>BROADCAST &amp; MEDIA</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#about" data-es="Nosotros" data-en="About">Nosotros</a>
+      <a href="#control" data-es="En Vivo" data-en="Live">En Vivo</a>
+      <a href="#services" data-es="Servicios" data-en="Services">Servicios</a>
+      <a href="#contact" data-es="Contacto" data-en="Contact">Contacto</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang"><button id="es" class="on">ES</button><i>/</i><button id="en">EN</button></div>
+      <a href="#contact" class="btn btn-pri" data-es="Contáctenos" data-en="Get in touch">Contáctenos</a>
+      <button class="burger" id="burger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mm" id="mm">
+  <button class="x" id="mx">×</button>
+  <a href="#about" data-es="Nosotros" data-en="About">Nosotros</a>
+  <a href="#control" data-es="En Vivo" data-en="Live">En Vivo</a>
+  <a href="#services" data-es="Servicios" data-en="Services">Servicios</a>
+  <a href="#contact" data-es="Contacto" data-en="Contact">Contacto</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-media">
+    <video autoplay muted loop playsinline preload="auto"
+      poster="https://images.pexels.com/videos/9737825/aerial-porsche-racecars-racing-9737825.jpeg?auto=compress&cs=tinysrgb&h=720&fit=crop&w=1280">
+      <source src="https://videos.pexels.com/video-files/9737825/9737825-uhd_2560_1440_24fps.mp4" type="video/mp4">
+    </video>
+    <div class="tint"></div>
+  </div>
+
+  <span class="vf tl"></span><span class="vf tr"></span><span class="vf bl"></span><span class="vf br"></span>
+
+  <div class="hud-top">
+    <div class="hud-live"><span class="live-dot"></span> <span data-es="EN VIVO" data-en="LIVE">EN VIVO</span></div>
+    <div class="hud-tc">
+      <span class="hide">CAM 01 · 4K HDR</span>
+      <span id="tc">00:00:00:00</span>
+      <span class="rec"><span class="live-dot"></span> REC</span>
+    </div>
+  </div>
+
+  <div class="wrap lower">
+    <span class="kick" data-es="PRISMA SPORTS FEED · SEÑAL EN VIVO" data-en="PRISMA SPORTS FEED · LIVE SIGNAL">PRISMA SPORTS FEED · SEÑAL EN VIVO</span>
+    <h1 data-es='Donde el deporte se <em>conecta</em>.' data-en='Where sport gets <em>connected</em>.'>Donde el deporte se <em>conecta</em>.</h1>
+    <p class="sub" data-es="Décadas de experiencia en broadcast internacional, fusionadas con la tecnología que define la nueva era del contenido audiovisual." data-en="Decades of international broadcast expertise, fused with the technology that defines the new era of audiovisual content.">Décadas de experiencia en broadcast internacional, fusionadas con la tecnología que define la nueva era del contenido audiovisual.</p>
+    <div class="hero-cta">
+      <a href="#services" class="btn btn-pri" data-es="Explorar Servicios" data-en="Explore Services">Explorar Servicios</a>
+      <a href="#contact" class="btn btn-ghost" data-es="Hablar con un experto" data-en="Talk to an expert">Hablar con un experto</a>
+    </div>
+  </div>
+
+  <div class="ticker">
+    <div class="tk-tag"><span class="live-dot" style="background:#fff;box-shadow:none;animation:none"></span>&nbsp;LIVE DATA</div>
+    <div class="tk-track" id="tk">
+      <span>LATENCIA <b id="lat">12</b> MS</span><span>BITRATE <b>80</b> MBPS</span><span>RESOLUCIÓN <b>4K HDR</b></span>
+      <span>FEEDS ACTIVOS <b id="fd">24</b></span><span>UPTIME <b>99.99%</b></span><span>VELOCIDAD <b id="spd">312</b> KM/H</span>
+      <span>PRISMA CONNECT <b>ONLINE</b></span>
+      <span>LATENCIA <b>12</b> MS</span><span>BITRATE <b>80</b> MBPS</span><span>RESOLUCIÓN <b>4K HDR</b></span>
+      <span>FEEDS ACTIVOS <b>24</b></span><span>UPTIME <b>99.99%</b></span><span>VELOCIDAD <b>312</b> KM/H</span>
+      <span>PRISMA CONNECT <b>ONLINE</b></span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="pad">
+  <div class="wrap about">
+    <div class="reveal">
+      <span class="eyebrow" data-es="Nosotros" data-en="About">Nosotros</span>
+      <h2 data-es='Conocemos el pasado. <em>Construimos el futuro.</em>' data-en='We know the past. <em>We build the future.</em>'>Conocemos el pasado. <em>Construimos el futuro.</em></h2>
+      <p style="margin-top:30px" data-es="En Prisma Broadcast &amp; Media combinamos la solidez de décadas de experiencia en broadcast internacional con la innovación tecnológica que define la nueva era del contenido audiovisual." data-en="At Prisma Broadcast &amp; Media we combine the solidity of decades of international broadcast experience with the technological innovation that defines the new era of audiovisual content.">En Prisma Broadcast &amp; Media combinamos la solidez de décadas de experiencia en broadcast internacional con la innovación tecnológica que define la nueva era del contenido audiovisual.</p>
+      <p data-es="Somos una empresa ágil y dinámica, respaldada por un equipo que ha vivido la evolución de la televisión desde sus cimientos — y aplica esa experiencia para impulsar la gestión deportiva con tecnología, eficiencia y visión estratégica." data-en="We are an agile, dynamic company, backed by a team that has lived the evolution of television from its foundations — applying that experience to drive sports management with technology, efficiency and strategic vision.">Somos una empresa ágil y dinámica, respaldada por un equipo que ha vivido la evolución de la televisión desde sus cimientos — y aplica esa experiencia para impulsar la gestión deportiva con tecnología, eficiencia y visión estratégica.</p>
+      <div class="stats">
+        <div class="stat"><div class="n" data-count="25" data-suffix="+">0</div><div class="l" data-es="Años de experiencia" data-en="Years experience">Años de experiencia</div></div>
+        <div class="stat"><div class="n red" data-count="7">0</div><div class="l" data-es="Unidades de servicio" data-en="Service units">Unidades de servicio</div></div>
+        <div class="stat"><div class="n" data-count="99.99" data-suffix="%">0</div><div class="l">Uptime</div></div>
+      </div>
+    </div>
+    <div class="about-media reveal">
+      <img src="https://images.pexels.com/videos/9737823/aerial-porsche-racecars-racing-9737823.jpeg?auto=compress&cs=tinysrgb&h=900&fit=crop&w=720" alt="">
+      <span class="tag-tl">SIGNAL // 02</span>
+      <span class="tag-br">● PRISMA</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTROL ROOM -->
+<section id="control" class="control pad">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-bottom:34px">
+      <span class="eyebrow" data-es="Sala de Control" data-en="Control Room">Sala de Control</span>
+      <h2 data-es='Muchas cámaras. <em>Una sola salida.</em>' data-en='Many cameras. <em>One output.</em>'>Muchas cámaras. <em>Una sola salida.</em></h2>
+    </div>
+    <div class="cr-bar reveal">
+      <div class="cr-now mono">NOW LIVE → <b id="pgmlabel">CAM 01 · PRISMA SPORT</b></div>
+      <div class="cr-now mono" data-es="Toca un feed para enviarlo a programa" data-en="Tap a feed to send it to program">Toca un feed para enviarlo a programa</div>
+    </div>
+    <div class="feeds reveal" id="feeds">
+      <div class="feed big pgm" data-label="CAM 01 · PRISMA SPORT">
+        <video autoplay muted loop playsinline preload="auto"
+          poster="https://images.pexels.com/videos/9737825/aerial-porsche-racecars-racing-9737825.jpeg?auto=compress&cs=tinysrgb&h=720&fit=crop&w=1280">
+          <source src="https://videos.pexels.com/video-files/9737825/9737825-uhd_2560_1440_24fps.mp4" type="video/mp4">
+        </video>
+        <div class="fx"></div><span class="cam">CAM 01</span><span class="tally"></span><span class="lbl">PRISMA PRODUCTION · LIVE COVERAGE</span>
+      </div>
+      <div class="feed" data-label="CAM 02 · TRACK FEED">
+        <video autoplay muted loop playsinline preload="none"
+          poster="https://images.pexels.com/videos/9737823/aerial-porsche-racecars-racing-9737823.jpeg?auto=compress&cs=tinysrgb&h=400&fit=crop&w=700">
+          <source src="https://videos.pexels.com/video-files/9737823/9737823-uhd_2560_1440_24fps.mp4" type="video/mp4">
+        </video>
+        <div class="fx"></div><span class="cam">CAM 02</span><span class="tally"></span><span class="lbl">DRONE · AERIAL</span>
+      </div>
+      <div class="feed" data-label="CAM 03 · STUDIO">
+        <img src="https://images.pexels.com/videos/9737823/aerial-porsche-racecars-racing-9737823.jpeg?auto=compress&cs=tinysrgb&h=400&fit=crop&w=700" alt="" style="filter:hue-rotate(180deg) saturate(.8) contrast(1.1)">
+        <div class="fx"></div><span class="cam">CAM 03</span><span class="tally"></span><span class="lbl">PRISMA STUDIO</span>
+      </div>
+      <div class="feed" data-label="AUDIO · MASTER">
+        <div class="fwave" id="wave"></div>
+        <div class="fx"></div><span class="cam">AUDIO</span><span class="tally"></span><span class="lbl">MASTER BUS · 0 dB</span>
+      </div>
+      <div class="feed" data-label="SCOPE · VECTOR">
+        <div class="fscope"><div class="ring"></div></div>
+        <div class="fx"></div><span class="cam">SCOPE</span><span class="tally"></span><span class="lbl">VECTORSCOPE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="services pad">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-es="Nuestros Servicios" data-en="Our Services">Nuestros Servicios</span>
+      <h2 data-es='El <em>espectro</em> completo del broadcast.' data-en='The full <em>spectrum</em> of broadcast.'>El <em>espectro</em> completo del broadcast.</h2>
+    </div>
+    <div class="chs reveal">
+      <div class="ch wide"><div><span class="ix">CH 01 — PRISMA SPORT</span><h3>Prisma Sport</h3>
+        <p data-es="Sports management para clubes, ligas y federaciones: gobernanza, estructura y monetización de activos deportivos con visión estratégica." data-en="Sports management for clubs, leagues and federations: governance, structure and monetization of sports assets with strategic vision.">Sports management para clubes, ligas y federaciones: gobernanza, estructura y monetización de activos deportivos con visión estratégica.</p></div>
+        <span class="go" data-es="Ver canal →" data-en="View channel →">Ver canal →</span></div>
+      <div class="ch"><div><span class="ix">CH 02 — PLAY</span><h3>Prisma Play</h3>
+        <p data-es="Plataformas de streaming escalables y de baja latencia." data-en="Scalable, low-latency streaming platforms.">Plataformas de streaming escalables y de baja latencia.</p></div><span class="go">→</span></div>
+      <div class="ch"><div><span class="ix">CH 03 — CONNECT</span><h3>Prisma Connect</h3>
+        <p data-es="Transporte de video punto a punto de alta fiabilidad." data-en="High-reliability point-to-point video transport.">Transporte de video punto a punto de alta fiabilidad.</p></div><span class="go">→</span></div>
+      <div class="ch"><div><span class="ix">CH 04 — PRODUCTION</span><h3>Prisma Production</h3>
+        <p data-es="Producción deportiva y cobertura en vivo de gran formato." data-en="Sports production and large-format live coverage.">Producción deportiva y cobertura en vivo de gran formato.</p></div><span class="go">→</span></div>
+      <div class="ch"><div><span class="ix">CH 05 — REPLAY</span><h3>Prisma Replay</h3>
+        <p data-es="Repetición instantánea y sistemas de arbitraje de video." data-en="Instant replay and video refereeing systems.">Repetición instantánea y sistemas de arbitraje de video.</p></div><span class="go">→</span></div>
+      <div class="ch"><div><span class="ix">CH 06 — STUDIO</span><h3>Prisma Studio</h3>
+        <p data-es="Producción de estudio y medios con acabado broadcast." data-en="Studio and media production with broadcast finish.">Producción de estudio y medios con acabado broadcast.</p></div><span class="go">→</span></div>
+      <div class="ch wide"><div><span class="ix">CH 07 — CONTENT</span><h3>Prisma Content</h3>
+        <p data-es="Inserción de publicidad y gráficos en tiempo real sobre la señal en vivo." data-en="Real-time advertising insertion and graphics over the live signal.">Inserción de publicidad y gráficos en tiempo real sobre la señal en vivo.</p></div>
+        <span class="go" data-es="Ver canal →" data-en="View channel →">Ver canal →</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNAL FLOW -->
+<section class="flow pad">
+  <div class="wrap flow-grid">
+    <div class="reveal">
+      <span class="eyebrow" data-es="Flujo de Señal" data-en="Signal Flow">Flujo de Señal</span>
+      <h2 data-es='Del campo a la <em>pantalla.</em>' data-en='From field to <em>screen.</em>'>Del campo a la <em>pantalla.</em></h2>
+      <p data-es="Cada unidad de Prisma opera como un solo organismo: captura, producción, transporte y distribución en sincronía perfecta, sin fricción ni pérdida de señal." data-en="Every Prisma unit operates as a single organism: capture, production, transport and distribution in perfect sync, with no friction or signal loss.">Cada unidad de Prisma opera como un solo organismo: captura, producción, transporte y distribución en sincronía perfecta, sin fricción ni pérdida de señal.</p>
+      <a href="#contact" class="btn btn-ghost" data-es="Diseñar mi flujo" data-en="Design my flow">Diseñar mi flujo</a>
+    </div>
+    <div class="pipe reveal">
+      <div class="sig"></div>
+      <div class="node"><div class="dot">01</div><div><h4 data-es="Captura" data-en="Capture">Captura</h4><p data-es="Cámaras y cobertura en vivo en el campo de juego." data-en="Cameras and live coverage on the field.">Cámaras y cobertura en vivo en el campo de juego.</p></div></div>
+      <div class="node"><div class="dot">02</div><div><h4 data-es="Producción" data-en="Production">Producción</h4><p data-es="Mezcla, repetición, gráficos y estudio." data-en="Mixing, replay, graphics and studio.">Mezcla, repetición, gráficos y estudio.</p></div></div>
+      <div class="node"><div class="dot">03</div><div><h4 data-es="Transporte" data-en="Transport">Transporte</h4><p data-es="Señal punto a punto de baja latencia." data-en="Low-latency point-to-point signal.">Señal punto a punto de baja latencia.</p></div></div>
+      <div class="node"><div class="dot">04</div><div><h4 data-es="Distribución" data-en="Distribution">Distribución</h4><p data-es="Streaming y licenciamiento a cualquier pantalla." data-en="Streaming and licensing to any screen.">Streaming y licenciamiento a cualquier pantalla.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact pad">
+  <div class="wrap cg">
+    <div class="cg-l reveal">
+      <span class="eyebrow" data-es="Contacto" data-en="Contact">Contacto</span>
+      <h2 data-es='Salgamos al <em>aire.</em>' data-en='Let’s go <em>on air.</em>'>Salgamos al <em>aire.</em></h2>
+      <p data-es="¿Listo para llevar su transmisión al siguiente nivel? Nuestro equipo está listo para diseñar la solución perfecta." data-en="Ready to take your broadcast to the next level? Our team is ready to design the perfect solution.">¿Listo para llevar su transmisión al siguiente nivel? Nuestro equipo está listo para diseñar la solución perfecta.</p>
+      <div class="cinfo">
+        <a href="#"><span class="ic">✉</span> hello@prismabm.com</a>
+        <a href="#"><span class="ic">◎</span> <span data-es="Ciudad de Panamá · Global" data-en="Panama City · Global">Ciudad de Panamá · Global</span></a>
+      </div>
+    </div>
+    <div class="form reveal">
+      <div class="row">
+        <div class="field"><label data-es="Nombre" data-en="Name">Nombre</label><input type="text" data-ph-es="Su nombre" data-ph-en="Your name" placeholder="Su nombre"></div>
+        <div class="field"><label data-es="Correo" data-en="Email">Correo</label><input type="email" data-ph-es="correo@empresa.com" data-ph-en="email@company.com" placeholder="correo@empresa.com"></div>
+      </div>
+      <div class="field"><label data-es="Empresa" data-en="Company">Empresa</label><input type="text" data-ph-es="Nombre de la empresa" data-ph-en="Company name" placeholder="Nombre de la empresa"></div>
+      <div class="field"><label data-es="Mensaje" data-en="Message">Mensaje</label><textarea data-ph-es="Cuéntenos sobre su proyecto…" data-ph-en="Tell us about your project…" placeholder="Cuéntenos sobre su proyecto…"></textarea></div>
+      <button class="btn btn-pri" data-es="Enviar transmisión →" data-en="Send transmission →">Enviar transmisión →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="ft">
+      <div class="ft-b">
+        <a href="#" class="brand">
+          <svg class="mark" viewBox="0 0 40 40" fill="none">
+            <path d="M20 3 L36 34 L4 34 Z" stroke="url(#g)" stroke-width="1.7"/>
+            <path d="M2 19 L20 19" stroke="#fff" stroke-width="1.5"/>
+            <path d="M20 19 L38 11" stroke="#ff647d" stroke-width="1.3"/><path d="M20 19 L38 19" stroke="#6fe6a0" stroke-width="1.3"/><path d="M20 19 L38 27" stroke="#7a82ff" stroke-width="1.3"/>
+          </svg>
+          <span class="bt"><b>PRISMA</b><span>BROADCAST &amp; MEDIA</span></span>
+        </a>
+        <p data-es="Donde el deporte, la tecnología y los medios se conectan." data-en="Where sports, technology and media connect.">Donde el deporte, la tecnología y los medios se conectan.</p>
+      </div>
+      <div class="fcols">
+        <div class="fcol"><h5 data-es="Navegación" data-en="Navigation">Navegación</h5>
+          <a href="#about" data-es="Nosotros" data-en="About">Nosotros</a><a href="#control" data-es="En Vivo" data-en="Live">En Vivo</a><a href="#contact" data-es="Contacto" data-en="Contact">Contacto</a></div>
+        <div class="fcol"><h5 data-es="Servicios" data-en="Services">Servicios</h5>
+          <a href="#services">Prisma Sport</a><a href="#services">Prisma Production</a><a href="#services">Prisma Connect</a></div>
+      </div>
+    </div>
+    <div class="fbot"><p>© 2026 PRISMA BROADCAST &amp; MEDIA</p><p data-es="Señal en vivo · Visión estratégica" data-en="Live signal · Strategic vision">Señal en vivo · Visión estratégica</p></div>
+  </div>
+</footer>
+
+<script>
+// nav
+const hdr=document.getElementById('hdr');
+addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>30));
+
+// reveal
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// timecode @24fps
+const tc=document.getElementById('tc');const pad=n=>String(n).padStart(2,'0');let f=0;
+setInterval(()=>{f++;const ff=f%24,s=Math.floor(f/24)%60,m=Math.floor(f/1440)%60,h=Math.floor(f/86400)%24;
+  tc.textContent=`${pad(h)}:${pad(m)}:${pad(s)}:${pad(ff)}`;},1000/24);
+
+// live telemetry jitter
+const lat=document.getElementById('lat'),spd=document.getElementById('spd'),fd=document.getElementById('fd');
+setInterval(()=>{lat.textContent=10+Math.floor(Math.random()*5);spd.textContent=298+Math.floor(Math.random()*46);
+  fd.textContent=22+Math.floor(Math.random()*5);},900);
+
+// audio waveform bars
+const wave=document.getElementById('wave');
+for(let i=0;i<22;i++){const b=document.createElement('i');b.style.height=(20+Math.random()*60)+'%';
+  b.style.animationDelay=(Math.random()*1.1)+'s';b.style.animationDuration=(.7+Math.random()*.8)+'s';wave.appendChild(b)}
+
+// multi-feed switcher
+const pgmlabel=document.getElementById('pgmlabel');
+document.querySelectorAll('#feeds .feed').forEach(fe=>{
+  fe.addEventListener('click',()=>{
+    document.querySelectorAll('#feeds .feed').forEach(x=>x.classList.remove('pgm'));
+    fe.classList.add('pgm');
+    pgmlabel.textContent=fe.getAttribute('data-label');
+  });
+});
+
+// language
+const esB=document.getElementById('es'),enB=document.getElementById('en');
+function setLang(l){document.documentElement.lang=l;esB.classList.toggle('on',l==='es');enB.classList.toggle('on',l==='en');
+  document.querySelectorAll('[data-es]').forEach(el=>el.innerHTML=el.getAttribute('data-'+l));
+  document.querySelectorAll('[data-ph-es]').forEach(el=>el.placeholder=el.getAttribute('data-ph-'+l));}
+esB.onclick=()=>setLang('es');enB.onclick=()=>setLang('en');
+
+// count-up
+function countUp(el){const t=parseFloat(el.dataset.count),suf=el.dataset.suffix||'',dec=(t%1!==0)?2:0;
+  let s=null;const dur=1400;
+  function step(ts){if(!s)s=ts;const p=Math.min((ts-s)/dur,1);const v=(t*(1-Math.pow(1-p,3)));
+    el.textContent=(dec?v.toFixed(2):Math.floor(v))+suf;if(p<1)requestAnimationFrame(step);else el.textContent=(dec?t.toFixed(2):t)+suf;}
+  requestAnimationFrame(step);}
+const sio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){countUp(e.target);sio.unobserve(e.target)}}),{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(el=>sio.observe(el));
+
+// mobile menu
+const mm=document.getElementById('mm');
+document.getElementById('burger').onclick=()=>mm.classList.add('open');
+document.getElementById('mx').onclick=()=>mm.classList.remove('open');
+mm.querySelectorAll('a').forEach(a=>a.onclick=()=>mm.classList.remove('open'));
+</script>
+</body>
+</html>
