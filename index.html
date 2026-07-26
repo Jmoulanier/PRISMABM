@@ -339,6 +339,8 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
 .fcol h5{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:16px}
 .fcol a{display:block;color:var(--ink-soft);text-decoration:none;font-size:13.5px;margin-bottom:10px;transition:.2s;font-weight:500}
 .fcol a:hover{color:#fff}
+.fcol-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:28px}
+.fcol-grid h5{grid-column:1/-1}
 .fbot{display:flex;justify-content:space-between;padding-top:26px;border-top:1px solid var(--line);flex-wrap:wrap;gap:12px}
 .fbot p{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted)}
 .back-top{position:fixed;right:28px;bottom:28px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;
@@ -683,7 +685,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
       <div class="fcols">
         <div class="fcol"><h5 data-es="Navegación" data-en="Navigation">Navegación</h5>
           <a href="#about" data-es="Nosotros" data-en="About">Nosotros</a><a href="#control" data-es="En Vivo" data-en="Live">En Vivo</a><a href="#contact" data-es="Contacto" data-en="Contact">Contacto</a></div>
-        <div class="fcol"><h5 data-es="Soluciones" data-en="Solutions">Soluciones</h5>
+        <div class="fcol fcol-grid"><h5 data-es="Soluciones" data-en="Solutions">Soluciones</h5>
           <a href="#services">Prisma Sport</a><a href="#services">Prisma Connect</a><a href="#services">Prisma Replay</a><a href="#services">Prisma Content</a><a href="#services">Prisma Studio</a><a href="#services">Prisma Production</a><a href="#services">Prisma Play</a><a href="#services">Prisma MediaHub</a></div>
       </div>
     </div>
