@@ -341,6 +341,13 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
 .fcol a:hover{color:#fff}
 .fbot{display:flex;justify-content:space-between;padding-top:26px;border-top:1px solid var(--line);flex-wrap:wrap;gap:12px}
 .fbot p{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted)}
+.back-top{position:fixed;right:28px;bottom:28px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;
+  background:var(--red);color:#fff;text-decoration:none;font-size:20px;font-weight:700;z-index:60;
+  clip-path:polygon(0 0,100% 0,100% 100%,8px 100%,0 calc(100% - 8px));
+  opacity:0;pointer-events:none;transform:translateY(14px);transition:.3s var(--e),background .2s}
+.back-top.show{opacity:1;pointer-events:auto;transform:none}
+.back-top:hover{background:#ff3445;transform:translateY(-4px)}
+@media(max-width:640px){.back-top{right:16px;bottom:16px;width:46px;height:46px;font-size:17px}}
 
 /* reveal */
 .reveal{opacity:0;transform:translateY(30px);transition:.85s var(--e)}
@@ -388,7 +395,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
 </div>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="hero">
   <div class="hero-media">
     <video autoplay muted loop playsinline preload="auto"
       poster="https://images.pexels.com/videos/9737825/aerial-porsche-racecars-racing-9737825.jpeg?auto=compress&cs=tinysrgb&h=720&fit=crop&w=1280">
@@ -676,18 +683,23 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
       <div class="fcols">
         <div class="fcol"><h5 data-es="Navegación" data-en="Navigation">Navegación</h5>
           <a href="#about" data-es="Nosotros" data-en="About">Nosotros</a><a href="#control" data-es="En Vivo" data-en="Live">En Vivo</a><a href="#contact" data-es="Contacto" data-en="Contact">Contacto</a></div>
-        <div class="fcol"><h5 data-es="Servicios" data-en="Services">Servicios</h5>
-          <a href="#services">Prisma Sport</a><a href="#services">Prisma Production</a><a href="#services">Prisma Connect</a></div>
+        <div class="fcol"><h5 data-es="Soluciones" data-en="Solutions">Soluciones</h5>
+          <a href="#services">Prisma Sport</a><a href="#services">Prisma Connect</a><a href="#services">Prisma Replay</a><a href="#services">Prisma Content</a><a href="#services">Prisma Studio</a><a href="#services">Prisma Production</a><a href="#services">Prisma Play</a><a href="#services">Prisma MediaHub</a></div>
       </div>
     </div>
     <div class="fbot"><p>© 2026 PRISMA BROADCAST &amp; MEDIA</p><p data-es="Señal en vivo · Visión estratégica" data-en="Live signal · Strategic vision">Señal en vivo · Visión estratégica</p></div>
   </div>
+  <a href="#hero" class="back-top" id="backTop" aria-label="Volver al inicio">↑</a>
 </footer>
 
 <script>
 // nav
 const hdr=document.getElementById('hdr');
 addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>30));
+
+// back to top
+const backTop=document.getElementById('backTop');
+addEventListener('scroll',()=>backTop.classList.toggle('show',scrollY>800),{passive:true});
 
 // reveal
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
