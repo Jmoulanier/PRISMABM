@@ -8,7 +8,7 @@
 <link rel="apple-touch-icon" href="/favicon-prisma-new.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800;900&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800;900&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#08090c;
@@ -30,7 +30,6 @@
   --blue-glow:rgba(90,133,184,.45);
   --spectrum:linear-gradient(100deg,#ff647d,#ffae5e 18%,#ffe45e 34%,#6fe6a0 52%,#5cd2ff 70%,#7a82ff 86%,#cf6bff);
   --disp:"Archivo Expanded",sans-serif;
-  --brand:"Poppins",sans-serif;
   --sans:"Archivo",-apple-system,sans-serif;
   --mono:"JetBrains Mono",monospace;
   --e:cubic-bezier(.22,.61,.36,1);
@@ -63,9 +62,8 @@ header.scrolled{background:rgba(8,9,12,.82);backdrop-filter:blur(20px);border-bo
 .brand{display:flex;align-items:center;gap:13px;text-decoration:none;color:var(--ink)}
 .mark{width:30px;height:30px;flex:none;object-fit:contain}
 .bt{display:flex;flex-direction:column;line-height:1}
-.bt b{font-family:var(--brand);font-weight:800;letter-spacing:.03em;font-size:16px}
-.bt b::after{content:"";display:block;height:2px;background:var(--ink);margin:5px 0 6px;border-radius:1px}
-.bt span{font-family:var(--mono);font-size:8px;letter-spacing:.34em;color:var(--muted)}
+.bt b{font-family:var(--disp);font-weight:800;letter-spacing:.14em;font-size:16px}
+.bt span{font-family:var(--mono);font-size:8px;letter-spacing:.34em;color:var(--muted);margin-top:5px}
 .nav-links{display:flex;align-items:center;gap:34px}
 .nav-links a{color:var(--ink-soft);text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.02em;
   text-transform:uppercase;position:relative;transition:color .2s;font-family:var(--mono)}
@@ -90,8 +88,6 @@ header.scrolled{background:rgba(8,9,12,.82);backdrop-filter:blur(20px);border-bo
 .hero{position:relative;height:100vh;min-height:660px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
 .hero-media{position:absolute;inset:0;z-index:0}
 .hero-media video,.hero-media img{width:100%;height:100%;object-fit:cover}
-.hero-vid{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease}
-.hero-vid.active{opacity:1}
 .hero-media::after{content:"";position:absolute;inset:0;
   background:linear-gradient(180deg,rgba(8,9,12,.55) 0%,rgba(8,9,12,.2) 35%,rgba(8,9,12,.55) 70%,var(--bg) 100%),
   linear-gradient(90deg,rgba(8,9,12,.75),transparent 55%)}
@@ -117,12 +113,12 @@ header.scrolled{background:rgba(8,9,12,.82);backdrop-filter:blur(20px);border-bo
 /* lower third */
 .lower{position:relative;z-index:6;padding-bottom:64px;display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
 .hero-block{max-width:660px;text-align:center;margin:0 auto}
-.hero h1{font-family:var(--brand);font-weight:900;text-transform:uppercase;line-height:.9;letter-spacing:-.01em;
+.hero h1{font-family:var(--disp);font-weight:900;text-transform:uppercase;line-height:.9;letter-spacing:-.02em;
   font-size:clamp(48px,8vw,112px);text-shadow:0 6px 40px rgba(0,0,0,.5);margin-bottom:0}
-.hero h1::after{content:"";display:block;height:6px;width:100%;background:var(--ink);margin:16px 0 12px;border-radius:2px}
-.hero-sub-brand{display:block;font-family:var(--brand);font-weight:800;text-transform:uppercase;font-size:clamp(20px,3.2vw,40px);
-  letter-spacing:.04em;color:var(--ink-soft);line-height:.95;margin-bottom:12px}
+.hero-sub-brand{display:block;font-family:var(--disp);font-weight:500;font-size:clamp(28px,4.5vw,66px);
+  letter-spacing:-.01em;color:var(--ink-soft);line-height:.95;margin-bottom:12px}
 .hero-lockup{position:relative;display:inline-block;margin-bottom:4px}
+.hero-lockup::after{content:"";display:block;height:3px;width:55%;background:var(--blue);margin-top:10px;margin-left:auto;margin-right:auto}
 .hero .sub{font-size:clamp(14px,1.3vw,16px);color:var(--muted);margin:20px auto 32px;font-weight:500;line-height:1.65;max-width:460px}
 .hero .sub em{font-style:normal;color:var(--ink-soft)}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
@@ -137,6 +133,7 @@ header.scrolled{background:rgba(8,9,12,.82);backdrop-filter:blur(20px);border-bo
   .lower{flex-direction:column;align-items:flex-start}
   .hero-left{flex-direction:row;gap:24px;border-top:1px solid var(--line);padding-top:18px;padding-bottom:0;width:100%}
   .hero-block{text-align:center;margin:0 auto;max-width:100%}
+  .hero-lockup::after{margin-left:auto;margin-right:auto}
   .hero-cta{justify-content:center}
 }
 
@@ -402,11 +399,10 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
 <!-- HERO -->
 <section class="hero" id="hero">
   <div class="hero-media">
-    <video class="hero-vid active" muted loop playsinline preload="auto"
+    <video autoplay muted loop playsinline preload="auto"
       poster="https://images.pexels.com/videos/9737825/aerial-porsche-racecars-racing-9737825.jpeg?auto=compress&cs=tinysrgb&h=720&fit=crop&w=1280">
       <source src="https://videos.pexels.com/video-files/9737825/9737825-uhd_2560_1440_24fps.mp4" type="video/mp4">
     </video>
-    <video class="hero-vid" muted loop playsinline preload="none"></video>
     <div class="tint"></div>
   </div>
 
@@ -803,52 +799,6 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   addEventListener('resize',measure);
   addEventListener('load',measure);
   rafId=requestAnimationFrame(tick);
-})();
-
-// hero background video loop
-(function(){
-  const HERO_VIDEOS=[
-    {src:'https://videos.pexels.com/video-files/9737825/9737825-uhd_2560_1440_24fps.mp4',
-     poster:'https://images.pexels.com/videos/9737825/aerial-porsche-racecars-racing-9737825.jpeg?auto=compress&cs=tinysrgb&h=720&fit=crop&w=1280'},
-    {src:'https://videos.pexels.com/video-files/2430839/2430839-uhd_2560_1440_24fps.mp4',
-     poster:'https://images.pexels.com/videos/2430839/free-video-2430839.jpg?auto=compress&w=1280&h=720&fit=crop'},
-    {src:'https://videos.pexels.com/video-files/8266312/8266312-hd_1920_1080_25fps.mp4',
-     poster:'https://images.pexels.com/videos/8266312/activity-adult-american-american-football-8266312.jpeg?auto=compress&w=1280&h=720&fit=crop'},
-    {src:'https://videos.pexels.com/video-files/11918917/11918917-hd_1920_1080_60fps.mp4',
-     poster:'https://images.pexels.com/videos/11918917/pexels-photo-11918917.jpeg?auto=compress&w=1280&h=720&fit=crop'},
-    {src:'https://videos.pexels.com/video-files/6883830/6883830-uhd_2732_1440_25fps.mp4',
-     poster:'https://images.pexels.com/videos/6883830/pexels-photo-6883830.jpeg?auto=compress&w=1280&h=720&fit=crop'},
-  ];
-  const els=[...document.querySelectorAll('.hero-vid')];
-  if(els.length<2)return;
-  const SLIDE_MS=3000, FADE_MS=1100;
-  let active=0, idx=0;
-
-  function loadInto(el,item){
-    el.poster=item.poster;
-    if(el.dataset.src!==item.src){
-      el.dataset.src=item.src;
-      el.innerHTML=`<source src="${item.src}" type="video/mp4">`;
-      el.load();
-    }
-  }
-  function safePlay(el){const p=el.play();if(p&&p.catch)p.catch(()=>{});}
-
-  loadInto(els[0],HERO_VIDEOS[0]);
-  safePlay(els[0]);
-  idx=1%HERO_VIDEOS.length;
-  loadInto(els[1],HERO_VIDEOS[idx]);
-
-  setInterval(()=>{
-    const nextEl=1-active;
-    els[nextEl].currentTime=0;
-    safePlay(els[nextEl]);
-    els[active].classList.remove('active');
-    els[nextEl].classList.add('active');
-    active=nextEl;
-    idx=(idx+1)%HERO_VIDEOS.length;
-    setTimeout(()=>{loadInto(els[1-active],HERO_VIDEOS[idx]);},FADE_MS);
-  },SLIDE_MS);
 })();
 
 // timecode @24fps
