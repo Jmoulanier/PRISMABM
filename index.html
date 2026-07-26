@@ -264,11 +264,11 @@ h2 em::after{content:"";position:absolute;left:0;bottom:.05em;width:100%;height:
 .svc-dots{display:flex;align-items:center;gap:9px}
 .svc-dots button{width:8px;height:8px;padding:0;border-radius:50%;background:var(--line-2);border:none;cursor:pointer;transition:.3s var(--e)}
 .svc-dots button.on{width:26px;border-radius:5px;background:var(--blue)}
-.svc-track{--card-w:min(900px,84vw);display:flex;gap:24px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
+.svc-track{--card-w:min(900px,84vw);display:flex;gap:24px;overflow-x:auto;overscroll-behavior-x:contain;
   -webkit-overflow-scrolling:touch;scrollbar-width:none;overflow-anchor:none;
   padding:4px calc(50% - var(--card-w)/2) 30px}
 .svc-track::-webkit-scrollbar{display:none}
-.svc{scroll-snap-align:center;flex:0 0 var(--card-w);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;
+.svc{flex:0 0 var(--card-w);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;
   position:relative;gap:0;border:1px solid var(--line);background:var(--bg-2);overflow:hidden;overflow-anchor:none;
   opacity:.4;transform:scale(1);transition:opacity .45s var(--e),border-color .3s var(--e),transform .45s var(--e)}
 .svc.is-active{opacity:1}
@@ -700,7 +700,7 @@ addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>30));
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-// services carousel
+// services carousel - continuous marquee motion (never stops except on hover)
 (()=>{
   const track=document.getElementById('svcTrack');
   if(!track)return;
@@ -708,88 +708,90 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   const prev=document.getElementById('svcPrev');
   const next=document.getElementById('svcNext');
   const dotsWrap=document.getElementById('svcDots');
+  const n=slides.length;
 
-  // infinite loop: clone the first/last card onto each end so motion never has to
-  // jump backwards - it always glides forward/backward, then silently re-centers
-  // on the real card once the clone is fully in view (imperceptible, same artwork)
-  const cloneFirst=slides[0].cloneNode(true);
-  const cloneLast=slides[slides.length-1].cloneNode(true);
-  cloneFirst.setAttribute('aria-hidden','true');
-  cloneLast.setAttribute('aria-hidden','true');
-  track.insertBefore(cloneLast,slides[0]);
-  track.appendChild(cloneFirst);
-  const all=[...track.children];
-  const REAL_START=1,REAL_END=all.length-2;
+  // infinite loop: append a full duplicate set right after the real cards.
+  // scrolling past the real set into the duplicate is visually identical, so
+  // wrapping scrollLeft back by exactly one set's width is imperceptible.
+  const clones=slides.map(s=>{
+    const c=s.cloneNode(true);
+    c.setAttribute('aria-hidden','true');
+    track.appendChild(c);
+    return c;
+  });
 
-  // pure horizontal scroll of the track only - never touches the page's vertical scroll,
-  // unlike scrollIntoView() which can jump the whole page if the card is off-screen
-  const centerOn=(el,behavior)=>{
-    const tr=track.getBoundingClientRect(),er=el.getBoundingClientRect();
-    const target=track.scrollLeft+(er.left-tr.left)-(tr.width/2-er.width/2);
-    track.scrollTo({left:target,behavior});
-  };
-  const goToReal=(i,behavior='smooth')=>{
-    const n=slides.length;
-    centerOn(slides[((i%n)+n)%n],behavior);
-  };
-  slides.forEach((_,i)=>{
+  let loopWidth=0;
+  const measure=()=>{loopWidth=clones[0].getBoundingClientRect().left-slides[0].getBoundingClientRect().left};
+
+  const dots=slides.map((_,i)=>{
     const b=document.createElement('button');
     b.type='button';b.setAttribute('aria-label','Go to slide '+(i+1));
-    b.addEventListener('click',()=>goToReal(i));
     dotsWrap.appendChild(b);
+    return b;
   });
-  const dots=[...dotsWrap.children];
-  const closestAllIndex=()=>{
-    const trackRect=track.getBoundingClientRect();
-    const centerX=trackRect.left+trackRect.width/2;
+
+  const closestIndex=()=>{
+    const tr=track.getBoundingClientRect();
+    const cx=tr.left+tr.width/2;
     let idx=0,best=Infinity;
-    all.forEach((s,i)=>{
+    [...slides,...clones].forEach((s,i)=>{
       const r=s.getBoundingClientRect();
-      const d=Math.abs((r.left+r.width/2)-centerX);
+      const d=Math.abs((r.left+r.width/2)-cx);
       if(d<best){best=d;idx=i}
     });
     return idx;
   };
   const setActive=()=>{
-    const idx=closestAllIndex();
-    all.forEach((s,i)=>s.classList.toggle('is-active',i===idx));
-    const n=slides.length;
-    const realIdx=((idx-REAL_START)%n+n)%n;
-    dots.forEach((d,i)=>d.classList.toggle('on',i===realIdx));
+    const idx=closestIndex()%n;
+    [...slides,...clones].forEach((s,i)=>s.classList.toggle('is-active',i%n===idx));
+    dots.forEach((d,i)=>d.classList.toggle('on',i===idx));
   };
-  const step=dir=>centerOn(all[Math.min(all.length-1,Math.max(0,closestAllIndex()+dir))],'smooth');
-  prev.addEventListener('click',()=>step(-1));
-  next.addEventListener('click',()=>step(1));
 
-  // once a smooth scroll settles on a clone, snap invisibly to the matching real card
-  let raf,settleTimer;
-  const onSettled=()=>{
-    const idx=closestAllIndex();
-    if(idx>REAL_END)centerOn(slides[0],'auto');
-    else if(idx<REAL_START)centerOn(slides[slides.length-1],'auto');
-    setActive();
+  // manual nav: pause the marquee, smooth-scroll one card, resume once it lands
+  let resumeTimer;
+  const manualStep=delta=>{
+    paused=true;
+    track.scrollBy({left:delta,behavior:'smooth'});
+    clearTimeout(resumeTimer);
+    resumeTimer=setTimeout(()=>{paused=false},600);
   };
-  track.addEventListener('scroll',()=>{
-    cancelAnimationFrame(raf);raf=requestAnimationFrame(setActive);
-    clearTimeout(settleTimer);settleTimer=setTimeout(onSettled,120);
-  },{passive:true});
-  addEventListener('resize',setActive);
+  const cardStep=()=>slides[0].getBoundingClientRect().width+24;
+  prev.addEventListener('click',()=>manualStep(-cardStep()));
+  next.addEventListener('click',()=>manualStep(cardStep()));
+  dots.forEach((b,i)=>b.addEventListener('click',()=>{
+    paused=true;
+    const tr=track.getBoundingClientRect(),er=slides[i].getBoundingClientRect();
+    track.scrollTo({left:track.scrollLeft+(er.left-tr.left)-(tr.width/2-er.width/2),behavior:'smooth'});
+    clearTimeout(resumeTimer);
+    resumeTimer=setTimeout(()=>{paused=false},600);
+  }));
 
-  // autoplay: advances on its own, pauses on hover
-  const AUTOPLAY_MS=4500;
-  let timer=null;
-  const stopPlay=()=>{if(timer){clearInterval(timer);timer=null}};
-  const startPlay=()=>{stopPlay();timer=setInterval(()=>step(1),AUTOPLAY_MS)};
-  track.addEventListener('mouseenter',stopPlay);
-  track.addEventListener('mouseleave',startPlay);
+  // continuous constant-speed motion, driven every frame - pausing/resuming
+  // is just flipping a flag, so there is never a startup delay
+  const SPEED=42; // px/second
+  let paused=false,lastTs=null,lastActiveCheck=0,rafId;
+  const tick=ts=>{
+    if(lastTs==null)lastTs=ts;
+    const dt=ts-lastTs;lastTs=ts;
+    if(!paused&&loopWidth>0){
+      track.scrollLeft+=SPEED*dt/1000;
+    }
+    if(loopWidth>0){
+      if(track.scrollLeft>=loopWidth)track.scrollLeft-=loopWidth;
+      else if(track.scrollLeft<0)track.scrollLeft+=loopWidth;
+    }
+    if(ts-lastActiveCheck>150){lastActiveCheck=ts;setActive()}
+    rafId=requestAnimationFrame(tick);
+  };
+  track.addEventListener('mouseenter',()=>{paused=true});
+  track.addEventListener('mouseleave',()=>{paused=false});
+  track.addEventListener('touchstart',()=>{paused=true},{passive:true});
+  track.addEventListener('touchend',()=>{clearTimeout(resumeTimer);resumeTimer=setTimeout(()=>{paused=false},1500)},{passive:true});
 
-  // hovering a card centers it and dims/shrinks the rest (via CSS :hover)
-  slides.forEach((s,i)=>s.addEventListener('mouseenter',()=>goToReal(i)));
-
-  centerOn(slides[0],'auto');
-  setActive();
-  addEventListener('load',()=>{centerOn(slides[0],'auto');setActive()});
-  startPlay();
+  measure();
+  addEventListener('resize',measure);
+  addEventListener('load',measure);
+  rafId=requestAnimationFrame(tick);
 })();
 
 // timecode @24fps
