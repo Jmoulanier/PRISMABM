@@ -709,7 +709,14 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   const prev=document.getElementById('svcPrev');
   const next=document.getElementById('svcNext');
   const dotsWrap=document.getElementById('svcDots');
-  const goTo=i=>slides[(i+slides.length)%slides.length].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  // pure horizontal scroll of the track only - never touches the page's vertical scroll,
+  // unlike scrollIntoView() which can jump the whole page if the card is off-screen
+  const goTo=i=>{
+    const el=slides[(i+slides.length)%slides.length];
+    const tr=track.getBoundingClientRect(),er=el.getBoundingClientRect();
+    const target=track.scrollLeft+(er.left-tr.left)-(tr.width/2-er.width/2);
+    track.scrollTo({left:target,behavior:'smooth'});
+  };
   slides.forEach((_,i)=>{
     const b=document.createElement('button');
     b.type='button';b.setAttribute('aria-label','Go to slide '+(i+1));
@@ -753,7 +760,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   track.addEventListener('mouseleave',startPlay);
 
   // hovering a card centers it and dims the rest (via CSS :hover)
-  slides.forEach(s=>s.addEventListener('mouseenter',()=>s.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})));
+  slides.forEach((s,i)=>s.addEventListener('mouseenter',()=>goTo(i)));
 
   // async image loads can nudge the scroll snap position; pin slide 1 as the true start
   track.scrollLeft=0;
