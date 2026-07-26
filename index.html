@@ -267,11 +267,11 @@ h2 em::after{content:"";position:absolute;left:0;bottom:.05em;width:100%;height:
 .svc-dots button{width:8px;height:8px;padding:0;border-radius:50%;background:var(--line-2);border:none;cursor:pointer;transition:.3s var(--e)}
 .svc-dots button.on{width:26px;border-radius:5px;background:var(--blue)}
 .svc-track{--card-w:min(900px,84vw);display:flex;gap:24px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
-  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;overflow-anchor:none;
   padding:4px calc(50% - var(--card-w)/2) 30px}
 .svc-track::-webkit-scrollbar{display:none}
 .svc{scroll-snap-align:center;flex:0 0 var(--card-w);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;
-  gap:0;border:1px solid var(--line);background:var(--bg-2);overflow:hidden;
+  gap:0;border:1px solid var(--line);background:var(--bg-2);overflow:hidden;overflow-anchor:none;
   opacity:.4;transition:opacity .45s var(--e),border-color .3s var(--e)}
 .svc.is-active{opacity:1}
 .svc-track:hover .svc.is-active{opacity:.4}
@@ -502,7 +502,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
   <div class="svc-track" id="svcTrack">
 
     <!-- 01 SPORT -->
-    <div class="svc reveal">
+    <div class="svc">
       <div class="svc-img">
         <img src="https://images.pexels.com/photos/9735384/pexels-photo-9735384.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop" alt="Prisma Sport">
         <span class="sig-tag">CH 01 · SIGNAL</span>
@@ -517,7 +517,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
     </div>
 
     <!-- 02 CONNECT -->
-    <div class="svc reveal">
+    <div class="svc">
       <div class="svc-img">
         <img src="https://images.pexels.com/photos/6325002/pexels-photo-6325002.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop" alt="Prisma Connect">
         <span class="sig-tag">CH 02 · SIGNAL</span>
@@ -532,7 +532,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
     </div>
 
     <!-- 03 REPLAY -->
-    <div class="svc reveal">
+    <div class="svc">
       <div class="svc-img">
         <img src="https://images.pexels.com/photos/14699396/pexels-photo-14699396.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop" alt="Prisma Replay">
         <span class="sig-tag">CH 03 · SIGNAL</span>
@@ -547,7 +547,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
     </div>
 
     <!-- 04 CONTENT -->
-    <div class="svc reveal">
+    <div class="svc">
       <div class="svc-img">
         <img src="https://images.pexels.com/photos/668296/pexels-photo-668296.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop" alt="Prisma Content">
         <span class="sig-tag">CH 04 · SIGNAL</span>
@@ -562,7 +562,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
     </div>
 
     <!-- 05 STUDIO -->
-    <div class="svc reveal">
+    <div class="svc">
       <div class="svc-img">
         <img src="https://images.pexels.com/photos/7865064/pexels-photo-7865064.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop" alt="Prisma Studio">
         <span class="sig-tag">CH 05 · SIGNAL</span>
@@ -577,7 +577,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
     </div>
 
     <!-- 06 PRODUCTION -->
-    <div class="svc reveal">
+    <div class="svc">
       <div class="svc-img">
         <img src="https://images.pexels.com/photos/159400/television-camera-men-outdoors-ballgame-159400.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop" alt="Prisma Production">
         <span class="sig-tag">CH 06 · SIGNAL</span>
@@ -592,7 +592,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
     </div>
 
     <!-- 07 PLAY -->
-    <div class="svc reveal">
+    <div class="svc">
       <div class="svc-img">
         <img src="https://images.pexels.com/photos/3811814/pexels-photo-3811814.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop" alt="Prisma Play">
         <span class="sig-tag">CH 07 · SIGNAL</span>
@@ -607,7 +607,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
     </div>
 
     <!-- 08 MEDIAHUB -->
-    <div class="svc reveal">
+    <div class="svc">
       <div class="svc-img">
         <img src="https://images.pexels.com/photos/6466141/pexels-photo-6466141.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop" alt="Prisma MediaHub">
         <span class="sig-tag">CH 08 · SIGNAL</span>
@@ -755,7 +755,10 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   // hovering a card centers it and dims the rest (via CSS :hover)
   slides.forEach(s=>s.addEventListener('mouseenter',()=>s.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})));
 
+  // async image loads can nudge the scroll snap position; pin slide 1 as the true start
+  track.scrollLeft=0;
   setActive();
+  addEventListener('load',()=>{track.scrollLeft=0;setActive()});
   startPlay();
 })();
 
