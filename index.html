@@ -266,13 +266,16 @@ h2 em::after{content:"";position:absolute;left:0;bottom:.05em;width:100%;height:
 .svc-dots{display:flex;align-items:center;gap:9px}
 .svc-dots button{width:8px;height:8px;padding:0;border-radius:50%;background:var(--line-2);border:none;cursor:pointer;transition:.3s var(--e)}
 .svc-dots button.on{width:26px;border-radius:5px;background:var(--blue)}
-.svc-track{display:flex;gap:24px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
+.svc-track{--card-w:min(900px,84vw);display:flex;gap:24px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
   -webkit-overflow-scrolling:touch;scrollbar-width:none;
-  padding:4px max(36px,calc((100vw - 1280px)/2 + 36px)) 30px;
-  scroll-padding-inline:max(36px,calc((100vw - 1280px)/2 + 36px))}
+  padding:4px calc(50% - var(--card-w)/2) 30px}
 .svc-track::-webkit-scrollbar{display:none}
-.svc{scroll-snap-align:start;flex:0 0 min(900px,84vw);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;
-  gap:0;border:1px solid var(--line);background:var(--bg-2);overflow:hidden}
+.svc{scroll-snap-align:center;flex:0 0 var(--card-w);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;
+  gap:0;border:1px solid var(--line);background:var(--bg-2);overflow:hidden;
+  opacity:.4;transition:opacity .45s var(--e),border-color .3s var(--e)}
+.svc.is-active{opacity:1}
+.svc-track:hover .svc.is-active{opacity:.4}
+.svc-track:hover .svc:hover{opacity:1;border-color:var(--line-2)}
 .svc-img{position:relative;overflow:hidden;min-width:0;width:100%;height:100%}
 .svc-img img{width:100%;height:100%;object-fit:cover;filter:grayscale(.3) contrast(1.05);transition:filter .5s var(--e),transform .5s var(--e)}
 .svc-img::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(8,9,12,.35) 0%,rgba(8,9,12,.1) 50%,rgba(90,133,184,.15) 100%)}
@@ -289,8 +292,8 @@ h2 em::after{content:"";position:absolute;left:0;bottom:.05em;width:100%;height:
 .svc-body .svc-cta:hover{gap:14px;color:#fff}
 @media(max-width:900px){
   .svc-nav{margin-top:-16px}
-  .svc-track{padding:4px 20px 26px;scroll-padding-inline:20px}
-  .svc{grid-template-columns:1fr;flex-basis:88vw}
+  .svc-track{--card-w:88vw;padding:4px calc(50% - var(--card-w)/2) 26px}
+  .svc{grid-template-columns:1fr}
   .svc-img{aspect-ratio:16/9;height:auto}
   .svc-body{padding:30px 26px}
 }
@@ -706,31 +709,54 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   const prev=document.getElementById('svcPrev');
   const next=document.getElementById('svcNext');
   const dotsWrap=document.getElementById('svcDots');
+  const goTo=i=>slides[(i+slides.length)%slides.length].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
   slides.forEach((_,i)=>{
     const b=document.createElement('button');
     b.type='button';b.setAttribute('aria-label','Go to slide '+(i+1));
-    b.addEventListener('click',()=>slides[i].scrollIntoView({behavior:'smooth',inline:'start',block:'nearest'}));
+    b.addEventListener('click',()=>goTo(i));
     dotsWrap.appendChild(b);
   });
   const dots=[...dotsWrap.children];
-  const setActive=()=>{
+  const closestIndex=()=>{
     const trackRect=track.getBoundingClientRect();
+    const centerX=trackRect.left+trackRect.width/2;
     let idx=0,best=Infinity;
     slides.forEach((s,i)=>{
-      const d=Math.abs(s.getBoundingClientRect().left-trackRect.left);
+      const r=s.getBoundingClientRect();
+      const d=Math.abs((r.left+r.width/2)-centerX);
       if(d<best){best=d;idx=i}
     });
+    return idx;
+  };
+  const setActive=()=>{
+    const idx=closestIndex();
+    slides.forEach((s,i)=>s.classList.toggle('is-active',i===idx));
     dots.forEach((d,i)=>d.classList.toggle('on',i===idx));
     prev.disabled=track.scrollLeft<=4;
     next.disabled=track.scrollLeft>=track.scrollWidth-track.clientWidth-4;
   };
-  const step=()=>slides[0].getBoundingClientRect().width+24;
-  prev.addEventListener('click',()=>track.scrollBy({left:-step(),behavior:'smooth'}));
-  next.addEventListener('click',()=>track.scrollBy({left:step(),behavior:'smooth'}));
+  prev.addEventListener('click',()=>goTo(closestIndex()-1));
+  next.addEventListener('click',()=>goTo(closestIndex()+1));
   let raf;
   track.addEventListener('scroll',()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(setActive)},{passive:true});
   addEventListener('resize',setActive);
+
+  // autoplay: advances on its own, pauses on hover
+  const AUTOPLAY_MS=4500;
+  let timer=null;
+  const stopPlay=()=>{if(timer){clearInterval(timer);timer=null}};
+  const startPlay=()=>{stopPlay();timer=setInterval(()=>{
+    const atEnd=track.scrollLeft>=track.scrollWidth-track.clientWidth-4;
+    goTo(atEnd?0:closestIndex()+1);
+  },AUTOPLAY_MS)};
+  track.addEventListener('mouseenter',stopPlay);
+  track.addEventListener('mouseleave',startPlay);
+
+  // hovering a card centers it and dims the rest (via CSS :hover)
+  slides.forEach(s=>s.addEventListener('mouseenter',()=>s.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})));
+
   setActive();
+  startPlay();
 })();
 
 // timecode @24fps
