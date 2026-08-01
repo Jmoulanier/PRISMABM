@@ -320,9 +320,9 @@ h2 em::after{content:"";position:absolute;left:0;bottom:.05em;width:100%;height:
 .contact{border-top:1px solid var(--line)}
 .cg{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px}
 .cg-l p{color:var(--ink-soft);font-size:16.5px;max-width:380px;margin:22px 0 36px;font-weight:500}
-.cinfo a{display:flex;align-items:center;gap:13px;color:var(--ink-soft);text-decoration:none;font-size:14px;
-  font-family:var(--mono);margin-bottom:16px;transition:color .2s}
-.cinfo a:hover{color:#fff}.cinfo .ic{width:34px;height:34px;border:1px solid var(--line-2);display:grid;place-items:center;flex:none}
+.cinfo-item{display:flex;align-items:center;gap:13px;color:var(--ink-soft);font-size:14px;
+  font-family:var(--mono);margin-bottom:16px}
+.cinfo .ic{width:34px;height:34px;border:1px solid var(--line-2);display:grid;place-items:center;flex:none}
 .form{display:grid;gap:16px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .field label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
@@ -658,8 +658,8 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
       <h2 data-es='Salgamos al <em>aire.</em>' data-en='Let’s go <em>on air.</em>'>Salgamos al <em>aire.</em></h2>
       <p data-es="¿Listo para llevar su transmisión al siguiente nivel? Nuestro equipo está listo para diseñar la solución perfecta." data-en="Ready to take your broadcast to the next level? Our team is ready to design the perfect solution.">¿Listo para llevar su transmisión al siguiente nivel? Nuestro equipo está listo para diseñar la solución perfecta.</p>
       <div class="cinfo">
-        <a href="mailto:ventas@prismabm.com"><span class="ic">✉</span> ventas@prismabm.com</a>
-        <a href="tel:+50763200533"><span class="ic">☎</span> +507 6320-0533</a>
+        <span class="cinfo-item"><span class="ic">✉</span> ventas@prismabm.com</span>
+        <span class="cinfo-item"><span class="ic">☎</span> +507 6320-0533</span>
       </div>
     </div>
     <div class="form reveal">
