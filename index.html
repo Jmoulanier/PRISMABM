@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="format-detection" content="telephone=no" />
 <title>PRISMA — Broadcast &amp; Media · LIVE</title>
 <link rel="icon" type="image/png" href="/favicon-prisma-new.png">
 <link rel="apple-touch-icon" href="/favicon-prisma-new.png">
@@ -60,12 +61,14 @@ img,video{display:block}
 header{position:fixed;top:0;left:0;right:0;z-index:80;transition:.4s var(--e)}
 header.scrolled{background:rgba(8,9,12,.82);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
 .nav{display:flex;align-items:center;justify-content:space-between;height:88px}
-.brand{display:flex;align-items:center;gap:13px;text-decoration:none;color:var(--ink);margin-top:6px;margin-left:8px}
-.mark{width:32px;height:32px;flex:none;object-fit:contain}
+.brand{display:flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink);margin-top:6px;margin-left:8px}
+.mark{width:28px;height:28px;flex:none;object-fit:contain}
 .bt{display:flex;flex-direction:column;line-height:1;text-align:center}
 .bt b{font-family:var(--brand);font-weight:900;letter-spacing:7.5px;font-size:21px}
 .bt b::after{content:"";display:block;height:2px;background:var(--ink);margin:5px 0 7px;border-radius:1px}
 .bt span{font-family:var(--mono);font-size:9px;letter-spacing:.26em;color:var(--muted)}
+.bt-logo{height:38px;width:auto;display:block}
+.hero-logo{width:clamp(200px,32vw,480px);height:auto;display:block;margin:0 auto;filter:drop-shadow(0 6px 40px rgba(0,0,0,.5))}
 .nav-links{display:flex;align-items:center;gap:34px}
 .nav-links a{color:var(--ink-soft);text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.02em;
   text-transform:uppercase;position:relative;transition:color .2s;font-family:var(--mono)}
@@ -83,11 +86,16 @@ header.scrolled{background:rgba(8,9,12,.82);backdrop-filter:blur(20px);border-bo
 .btn-ghost{background:rgba(255,255,255,.04);color:var(--ink);border:1px solid var(--line-2)}
 .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
 .burger{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:6px}
-.burger span{width:22px;height:2px;background:var(--ink);display:block}
+.burger{z-index:96;position:relative}
+.burger span{width:22px;height:2px;background:var(--ink);display:block;transition:transform .35s var(--e),opacity .25s var(--e)}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 @media(max-width:960px){.nav-links{display:none}.burger{display:flex}.nav-right .btn{display:none}}
 
 /* ───────── HERO ───────── */
-.hero{position:relative;height:100vh;min-height:660px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.hero{position:relative;height:100vh;min-height:660px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;
+  --vf-x:36px;--vf-t:108px;--vf-b:120px;--vf-arm:26px}
 .hero-media{position:absolute;inset:0;z-index:0}
 .hero-media video,.hero-media img{width:100%;height:100%;object-fit:cover}
 .hero-vid{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease}
@@ -98,21 +106,21 @@ header.scrolled{background:rgba(8,9,12,.82);backdrop-filter:blur(20px);border-bo
 .hero-media .tint{position:absolute;inset:0;background:rgba(255,36,54,.05);mix-blend-mode:overlay}
 
 /* viewfinder corners */
-.vf{position:absolute;z-index:5;width:26px;height:26px;border:2px solid rgba(255,255,255,.6)}
-.vf.tl{top:108px;left:36px;border-right:0;border-bottom:0}
-.vf.tr{top:108px;right:36px;border-left:0;border-bottom:0}
-.vf.bl{bottom:120px;left:36px;border-right:0;border-top:0}
-.vf.br{bottom:120px;right:36px;border-left:0;border-top:0}
+.vf{position:absolute;z-index:5;width:var(--vf-arm);height:var(--vf-arm);border:2px solid rgba(255,255,255,.6)}
+.vf.tl{top:var(--vf-t);left:var(--vf-x);border-right:0;border-bottom:0}
+.vf.tr{top:var(--vf-t);right:var(--vf-x);border-left:0;border-bottom:0}
+.vf.bl{bottom:var(--vf-b);left:var(--vf-x);border-right:0;border-top:0}
+.vf.br{bottom:var(--vf-b);right:var(--vf-x);border-left:0;border-top:0}
 
 /* HUD top row */
-.hud-top{position:absolute;top:126px;left:0;right:0;z-index:6;display:flex;justify-content:space-between;
-  align-items:center;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;padding:0 92px}
+.hud-top{position:absolute;top:calc(var(--vf-t) + 18px);left:0;right:0;z-index:6;display:flex;justify-content:space-between;
+  align-items:center;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;padding:0 calc(var(--vf-x) + 56px)}
 .hud-live{display:flex;align-items:center;gap:10px;background:rgba(255,36,54,.14);border:1px solid var(--red);
   padding:6px 12px;color:#fff;font-weight:700}
 .hud-tc{display:flex;align-items:center;gap:18px;color:var(--ink-soft)}
 .hud-tc #tc{color:#fff;background:rgba(0,0,0,.35);padding:5px 10px;border:1px solid var(--line)}
 .hud-tc .rec{color:var(--red);display:flex;align-items:center;gap:6px}
-@media(max-width:760px){.hud-top{padding:0 26px;font-size:10px}.hud-tc span.hide{display:none}}
+@media(max-width:760px){.hud-top{font-size:10px}.hud-tc span.hide{display:none}}
 
 /* lower third */
 .lower{position:relative;z-index:6;padding-bottom:80px;display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
@@ -138,6 +146,10 @@ header.scrolled{background:rgba(8,9,12,.82);backdrop-filter:blur(20px);border-bo
   .hero-left{flex-direction:row;gap:24px;border-top:1px solid var(--line);border-left:none;padding-top:18px;padding-left:0;padding-bottom:0;width:100%}
   .hero-block{text-align:center;margin:0 auto;max-width:100%;transform:none}
   .hero-cta{justify-content:center}
+  .hero{--vf-x:14px;--vf-t:96px;--vf-b:64px;--vf-arm:18px}
+  .hud-top{top:calc(var(--vf-t) + 4px);padding:0 calc(var(--vf-x) + var(--vf-arm) + 10px);gap:10px}
+  .hud-live{padding:5px 9px}
+  .hud-tc{gap:10px}
 }
 
 /* telemetry ticker */
@@ -156,6 +168,7 @@ header.scrolled{background:rgba(8,9,12,.82);backdrop-filter:blur(20px);border-bo
 /* ───────── SECTION SHELL ───────── */
 section{position:relative;z-index:2}
 .pad{padding:130px 0}
+@media(max-width:768px){.pad{padding:64px 0}.sec-head{margin-bottom:36px}}
 .eyebrow{display:inline-flex;align-items:center;gap:11px;font-family:var(--mono);font-size:11.5px;font-weight:700;
   letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:22px}
 .eyebrow::before{content:"//";color:var(--blue);font-weight:700}
@@ -359,11 +372,36 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
 .reveal.in{opacity:1;transform:none}
 
 /* mobile menu */
-.mm{position:fixed;inset:0;z-index:95;background:rgba(8,9,12,.98);display:flex;flex-direction:column;
-  justify-content:center;align-items:center;gap:26px;opacity:0;pointer-events:none;transition:.35s}
-.mm.open{opacity:1;pointer-events:auto}
-.mm a{color:#fff;text-decoration:none;font-family:var(--disp);font-weight:800;text-transform:uppercase;font-size:30px}
-.mm .x{position:absolute;top:24px;right:24px;background:none;border:none;color:#fff;font-size:30px;cursor:pointer}
+.mm{position:fixed;inset:0;z-index:75;background:rgba(8,9,12,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  display:flex;flex-direction:column;justify-content:center;padding:96px 30px 36px;
+  opacity:0;visibility:hidden;transition:opacity .4s var(--e),visibility 0s linear .4s}
+.mm::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0,rgba(255,255,255,.02) 1px,transparent 2px,transparent 4px)}
+.mm.open{opacity:1;visibility:visible;transition:opacity .4s var(--e)}
+.mm-kicker{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);
+  margin-bottom:8px;display:flex;align-items:center;gap:9px;
+  opacity:0;transform:translateY(20px);transition:opacity .45s var(--e),transform .45s var(--e)}
+.mm-kicker::before{content:"//"}
+.mm-kicker .live-dot{margin-left:auto}
+.mm.open .mm-kicker{opacity:1;transform:none;transition-delay:.05s}
+.mm nav{display:flex;flex-direction:column;position:relative;z-index:2}
+.mm nav a{display:flex;align-items:baseline;gap:16px;padding:19px 0;border-bottom:1px solid var(--line);
+  color:#fff;text-decoration:none;font-family:var(--disp);font-weight:800;text-transform:uppercase;
+  font-size:clamp(27px,7.4vw,38px);line-height:1;
+  opacity:0;transform:translateY(28px);transition:opacity .5s var(--e),transform .5s var(--e),color .2s}
+.mm nav a i{font-family:var(--mono);font-style:normal;font-weight:700;font-size:11px;letter-spacing:.14em;color:var(--blue);flex:none}
+.mm nav a::after{content:"\2192";margin-left:auto;font-family:var(--mono);font-size:17px;color:var(--muted)}
+.mm nav a:active{color:var(--red)}
+.mm.open nav a{opacity:1;transform:none}
+.mm.open nav a:nth-of-type(1){transition-delay:.1s}
+.mm.open nav a:nth-of-type(2){transition-delay:.17s}
+.mm.open nav a:nth-of-type(3){transition-delay:.24s}
+.mm.open nav a:nth-of-type(4){transition-delay:.31s}
+.mm-foot{margin-top:34px;display:flex;flex-direction:column;gap:16px;position:relative;z-index:2;
+  opacity:0;transform:translateY(24px);transition:opacity .5s var(--e),transform .5s var(--e)}
+.mm.open .mm-foot{opacity:1;transform:none;transition-delay:.38s}
+.mm-foot .btn{justify-content:center}
+.mm-foot .mm-sig{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--muted);text-align:center}
 </style>
 </head>
 <body>
@@ -374,8 +412,8 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
 <header id="hdr">
   <div class="wrap nav">
     <a href="#" class="brand">
-      <img class="mark" src="/favicon-prisma-new.png" alt="Prisma">
-      <span class="bt"><b>PRISMA</b><span>BROADCAST &amp; MEDIA</span></span>
+      <img class="mark" src="/icon-mark-nav.png" alt="Prisma">
+      <img class="bt-logo" src="/logo-prisma-wordmark.png" alt="Prisma Broadcast &amp; Media">
     </a>
     <nav class="nav-links">
       <a href="#about" data-es="Nosotros" data-en="About">Nosotros</a>
@@ -392,11 +430,17 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
 </header>
 
 <div class="mm" id="mm">
-  <button class="x" id="mx">×</button>
-  <a href="#about" data-es="Nosotros" data-en="About">Nosotros</a>
-  <a href="#control" data-es="En Vivo" data-en="Live">En Vivo</a>
-  <a href="#services" data-es="Servicios" data-en="Services">Servicios</a>
-  <a href="#contact" data-es="Contacto" data-en="Contact">Contacto</a>
+  <span class="mm-kicker"><span data-es="Navegación" data-en="Navigation">Navegación</span><span class="live-dot"></span></span>
+  <nav>
+    <a href="#about"><i>CH 01</i><span data-es="Nosotros" data-en="About">Nosotros</span></a>
+    <a href="#control"><i>CH 02</i><span data-es="En Vivo" data-en="Live">En Vivo</span></a>
+    <a href="#services"><i>CH 03</i><span data-es="Servicios" data-en="Services">Servicios</span></a>
+    <a href="#contact"><i>CH 04</i><span data-es="Contacto" data-en="Contact">Contacto</span></a>
+  </nav>
+  <div class="mm-foot">
+    <a href="#contact" class="btn btn-pri" data-es="Contáctenos" data-en="Get in touch">Contáctenos</a>
+    <span class="mm-sig">PRISMA BROADCAST &amp; MEDIA · LIVE 24/7</span>
+  </div>
 </div>
 
 <!-- HERO -->
@@ -424,13 +468,12 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
   <div class="wrap lower">
     <div class="hero-left">
       <div class="hero-stat"><span class="hs-n">25+</span><span class="hs-l" data-es="Años en broadcast" data-en="Years in broadcast">Años en broadcast</span></div>
-      <div class="hero-stat"><span class="hs-n">7</span><span class="hs-l" data-es="Unidades de servicio" data-en="Service units">Unidades de servicio</span></div>
+      <div class="hero-stat"><span class="hs-n">8</span><span class="hs-l" data-es="Business Units" data-en="Business Units">Business Units</span></div>
       <div class="hero-stat"><span class="hs-n">99.99<span style="font-size:.5em;color:var(--muted)">%</span></span><span class="hs-l">Uptime</span></div>
     </div>
     <div class="hero-block">
       <div class="hero-lockup">
-        <h1>PRISMA</h1>
-        <span class="hero-sub-brand" data-es="Broadcast &amp; Media" data-en="Broadcast &amp; Media">Broadcast &amp; Media</span>
+        <img class="hero-logo" src="/logo-prisma-wordmark.png" alt="Prisma Broadcast &amp; Media">
       </div>
       <p class="sub" data-es='Donde el deporte, la tecnología y los medios <em>se conectan.</em>' data-en='Where sport, technology and media <em>connect.</em>'>Donde el deporte, la tecnología y los medios <em>se conectan.</em></p>
       <div class="hero-cta">
@@ -461,8 +504,8 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
       <span class="eyebrow" data-es="Nosotros" data-en="About">Nosotros</span>
       <h2 data-es='Conocemos el pasado. <em>Construimos el futuro.</em>' data-en='We know the past. <em>We build the future.</em>'>Conocemos el pasado. <em>Construimos el futuro.</em></h2>
       <span class="about-kicker" data-es="25+ AÑOS EN BROADCAST INTERNACIONAL" data-en="25+ YEARS IN INTERNATIONAL BROADCAST">25+ AÑOS EN BROADCAST INTERNACIONAL</span>
-      <p data-es="En Prisma Broadcast &amp; Media combinamos la solidez de décadas de experiencia en broadcast internacional con la innovación tecnológica que define la nueva era del contenido audiovisual." data-en="At Prisma Broadcast &amp; Media we combine the solidity of decades of international broadcast experience with the technological innovation that defines the new era of audiovisual content.">En Prisma Broadcast &amp; Media combinamos la solidez de décadas de experiencia en broadcast internacional con la innovación tecnológica que define la nueva era del contenido audiovisual.</p>
-      <p data-es="Somos una empresa ágil y dinámica, respaldada por un equipo que ha vivido la evolución de la televisión desde sus cimientos — y aplica esa experiencia para impulsar la gestión deportiva con tecnología, eficiencia y visión estratégica." data-en="We are an agile, dynamic company, backed by a team that has lived the evolution of television from its foundations — applying that experience to drive sports management with technology, efficiency and strategic vision.">Somos una empresa ágil y dinámica, respaldada por un equipo que ha vivido la evolución de la televisión desde sus cimientos — y aplica esa experiencia para impulsar la gestión deportiva con tecnología, eficiencia y visión estratégica.</p>
+      <p data-es="En Prisma Broadcast &amp; Media conectamos la tradición técnica con la innovación digital." data-en="At Prisma Broadcast &amp; Media, we bridge technical heritage with digital innovation.">En Prisma Broadcast &amp; Media conectamos la tradición técnica con la innovación digital.</p>
+      <p data-es="Combinamos décadas de trayectoria en el broadcast internacional con las tecnologías que definen la nueva era del contenido audiovisual. Somos una organización ágil y dinámica, respaldada por un equipo que ha vivido la evolución de la televisión desde sus inicios y que hoy transforma esa experiencia en tecnología, eficiencia y visión estratégica para la gestión deportiva." data-en="We combine decades of experience in international broadcast with the technologies shaping the new era of audiovisual content. We are an agile and dynamic organization, backed by a team that has lived the evolution of television from the ground up—transforming that expertise into technology, efficiency, and strategic vision for sports management.">Combinamos décadas de trayectoria en el broadcast internacional con las tecnologías que definen la nueva era del contenido audiovisual. Somos una organización ágil y dinámica, respaldada por un equipo que ha vivido la evolución de la televisión desde sus inicios y que hoy transforma esa experiencia en tecnología, eficiencia y visión estratégica para la gestión deportiva.</p>
       <div class="stats">
         <div class="stat"><div class="n" data-count="25" data-suffix="+">0</div><div class="l" data-es="Años de experiencia" data-en="Years experience">Años de experiencia</div></div>
         <div class="stat"><div class="n blue" data-count="8">0</div><div class="l" data-es="Soluciones" data-en="Solutions">Soluciones</div></div>
@@ -517,7 +560,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
       <div class="svc-body">
         <span class="ix">SERVICIO 01 · CH 01</span>
         <h3>Prisma Sport</h3>
-        <p class="tl" data-es="La gestión deportiva, más allá del campo." data-en="Sports management, beyond the field.">La gestión deportiva, más allá del campo.</p>
+        <p class="tl" data-es="Licencia y Gestión de contenido" data-en="License and content management">Licencia y Gestión de contenido</p>
         <p data-es="Trabajamos con clubes, ligas y federaciones para construir estructuras sólidas de gobernanza, desarrollar activos deportivos y crear modelos de monetización que aseguren la viabilidad y el crecimiento a largo plazo." data-en="We work with clubs, leagues and federations to build solid governance structures, develop sports assets and create monetization models that ensure long-term viability and growth.">Trabajamos con clubes, ligas y federaciones para construir estructuras sólidas de gobernanza, desarrollar activos deportivos y crear modelos de monetización que aseguren la viabilidad y el crecimiento a largo plazo.</p>
         <a href="#contact" class="svc-cta" data-es="Solicitar información →" data-en="Request information →">Solicitar información →</a>
       </div>
@@ -533,7 +576,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
         <span class="ix">SERVICIO 02 · CH 02</span>
         <h3>Prisma Connect</h3>
         <p class="tl" data-es="Su señal, donde la necesita, sin latencia." data-en="Your signal, where you need it, without latency.">Su señal, donde la necesita, sin latencia.</p>
-        <p data-es="Infraestructura de transporte de video punto a punto de alta fiabilidad: contribución, distribución y retransmisión con latencia mínima y disponibilidad 24/7 para producción en vivo." data-en="High-reliability point-to-point video transport infrastructure: contribution, distribution and retransmission with minimum latency and 24/7 availability for live production.">Infraestructura de transporte de video punto a punto de alta fiabilidad: contribución, distribución y retransmisión con latencia mínima y disponibilidad 24/7 para producción en vivo.</p>
+        <p data-es="Infraestructura de transporte de video punto a punto de alta fiabilidad: contribución y distribución con latencia mínima y disponibilidad 24/7 para producción en vivo." data-en="High-reliability point-to-point video transport infrastructure: contribution, distribution and retransmission with minimum latency and 24/7 availability for live production.">Infraestructura de transporte de video punto a punto de alta fiabilidad: contribución y distribución con latencia mínima y disponibilidad 24/7 para producción en vivo.</p>
         <a href="#contact" class="svc-cta" data-es="Solicitar información →" data-en="Request information →">Solicitar información →</a>
       </div>
     </div>
@@ -548,7 +591,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
         <span class="ix">SERVICIO 03 · CH 03</span>
         <h3>Prisma Replay</h3>
         <p class="tl" data-es="Justicia y precisión en cada jugada." data-en="Justice and precision in every play.">Justicia y precisión en cada jugada.</p>
-        <p data-es="Sistemas de repetición instantánea y arbitraje de video para competencias profesionales: VAR, hawk-eye y análisis de imagen en tiempo real que garantizan decisiones correctas bajo la presión del directo." data-en="Instant replay and video refereeing systems for professional competitions: VAR, hawk-eye and real-time image analysis that guarantee correct decisions under live pressure.">Sistemas de repetición instantánea y arbitraje de video para competencias profesionales: VAR, hawk-eye y análisis de imagen en tiempo real que garantizan decisiones correctas bajo la presión del directo.</p>
+        <p data-es="Sistemas de repetición instantánea y arbitraje de video para competencias profesionales: VAR y análisis de imagen en tiempo real que garantizan decisiones correctas bajo la presión del directo." data-en="Instant replay and video refereeing systems for professional competitions: VAR, hawk-eye and real-time image analysis that guarantee correct decisions under live pressure.">Sistemas de repetición instantánea y arbitraje de video para competencias profesionales: VAR y análisis de imagen en tiempo real que garantizan decisiones correctas bajo la presión del directo.</p>
         <a href="#contact" class="svc-cta" data-es="Solicitar información →" data-en="Request information →">Solicitar información →</a>
       </div>
     </div>
@@ -593,7 +636,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
         <span class="ix">SERVICIO 06 · CH 06</span>
         <h3>Prisma Production</h3>
         <p class="tl" data-es="La emoción del deporte, producida con inteligencia." data-en="The emotion of sport, produced with intelligence.">La emoción del deporte, producida con inteligencia.</p>
-        <p data-es="Cobertura en vivo de gran formato para eventos deportivos: unidades móviles, equipos multicámara, dirección de realizadores senior y workflows de producción remota para cualquier escala de competición." data-en="Large-format live coverage for sports events: mobile units, multi-camera teams, senior director workflows and remote production pipelines for any competition scale.">Cobertura en vivo de gran formato para eventos deportivos: unidades móviles, equipos multicámara, dirección de realizadores senior y workflows de producción remota para cualquier escala de competición.</p>
+        <p data-es="Cobertura en vivo de gran formato para eventos deportivos: unidades móviles, equipos multicámara, dirección de realizadores senior y workflows de producción remota para cualquier escala de competición." data-en="From local competitions to large-format international events: delivering end-to-end live sports coverage with mobile units, expert multi-camera crews, and scalable remote workflows.">Cobertura en vivo de gran formato para eventos deportivos: unidades móviles, equipos multicámara, dirección de realizadores senior y workflows de producción remota para cualquier escala de competición.</p>
         <a href="#contact" class="svc-cta" data-es="Solicitar información →" data-en="Request information →">Solicitar información →</a>
       </div>
     </div>
@@ -656,7 +699,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
     <div class="cg-l reveal">
       <span class="eyebrow" data-es="Contacto" data-en="Contact">Contacto</span>
       <h2 data-es='Salgamos al <em>aire.</em>' data-en='Let’s go <em>on air.</em>'>Salgamos al <em>aire.</em></h2>
-      <p data-es="¿Listo para llevar su transmisión al siguiente nivel? Nuestro equipo está listo para diseñar la solución perfecta." data-en="Ready to take your broadcast to the next level? Our team is ready to design the perfect solution.">¿Listo para llevar su transmisión al siguiente nivel? Nuestro equipo está listo para diseñar la solución perfecta.</p>
+      <p data-es="¿Listo para llevar su contenido al siguiente nivel? Nuestro equipo está listo para diseñar la solución perfecta." data-en="Ready to take your content to the next level? Our team is ready to design the perfect solution.">¿Listo para llevar su contenido al siguiente nivel? Nuestro equipo está listo para diseñar la solución perfecta.</p>
       <div class="cinfo">
         <span class="cinfo-item"><span class="ic">✉</span> ventas@prismabm.com</span>
         <span class="cinfo-item"><span class="ic">☎</span> +507 6320-0533</span>
@@ -680,11 +723,10 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
     <div class="ft">
       <div class="ft-b">
         <a href="#" class="brand">
-          <img class="mark" src="/favicon-prisma-new.png" alt="Prisma">
-          <span class="bt"><b>PRISMA</b><span>BROADCAST &amp; MEDIA</span></span>
+          <img class="mark" src="/icon-mark-nav.png" alt="Prisma">
+          <img class="bt-logo" src="/logo-prisma-wordmark.png" alt="Prisma Broadcast &amp; Media">
         </a>
         <p data-es="Donde el deporte, la tecnología y los medios se conectan." data-en="Where sports, technology and media connect.">Donde el deporte, la tecnología y los medios se conectan.</p>
-        <p data-es="Ciudad de Panamá · Global" data-en="Panama City · Global">Ciudad de Panamá · Global</p>
       </div>
       <div class="fcols">
         <div class="fcol"><h5 data-es="Navegación" data-en="Navigation">Navegación</h5>
@@ -780,12 +822,14 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   // continuous constant-speed motion, driven every frame - pausing/resuming
   // is just flipping a flag, so there is never a startup delay
   const SPEED=42; // px/second
-  let paused=false,lastTs=null,lastActiveCheck=0,rafId;
+  let paused=false,lastTs=null,lastActiveCheck=0,rafId,acc=0,lastTouch=0,touching=false;
   const tick=ts=>{
     if(lastTs==null)lastTs=ts;
     const dt=ts-lastTs;lastTs=ts;
     if(!paused&&loopWidth>0){
-      track.scrollLeft+=SPEED*dt/1000;
+      acc+=SPEED*dt/1000;
+      const step=Math.round(acc);
+      if(step!==0){track.scrollLeft+=step;acc-=step}
     }
     if(loopWidth>0){
       if(track.scrollLeft>=loopWidth)track.scrollLeft-=loopWidth;
@@ -794,10 +838,16 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
     if(ts-lastActiveCheck>150){lastActiveCheck=ts;setActive()}
     rafId=requestAnimationFrame(tick);
   };
-  track.addEventListener('mouseenter',()=>{paused=true});
-  track.addEventListener('mouseleave',()=>{paused=false});
-  track.addEventListener('touchstart',()=>{paused=true},{passive:true});
-  track.addEventListener('touchend',()=>{clearTimeout(resumeTimer);resumeTimer=setTimeout(()=>{paused=false},1500)},{passive:true});
+  track.addEventListener('mouseenter',()=>{if(Date.now()-lastTouch<800)return;paused=true});
+  track.addEventListener('mouseleave',()=>{if(Date.now()-lastTouch<800)return;paused=false});
+  const deferResume=ms=>{clearTimeout(resumeTimer);resumeTimer=setTimeout(()=>{if(!touching)paused=false},ms)};
+  track.addEventListener('touchstart',()=>{lastTouch=Date.now();touching=true;clearTimeout(resumeTimer);paused=true},{passive:true});
+  track.addEventListener('touchmove',()=>{lastTouch=Date.now()},{passive:true});
+  const endTouch=()=>{lastTouch=Date.now();touching=false;deferResume(6000)};
+  track.addEventListener('touchend',endTouch,{passive:true});
+  track.addEventListener('touchcancel',endTouch,{passive:true});
+  // momentum after release keeps firing scroll events; keep deferring until it settles
+  track.addEventListener('scroll',()=>{if(!touching&&paused&&Date.now()-lastTouch<3000)deferResume(6000)},{passive:true});
 
   measure();
   addEventListener('resize',measure);
@@ -923,9 +973,10 @@ document.querySelectorAll('[data-count]').forEach(el=>sio.observe(el));
 
 // mobile menu
 const mm=document.getElementById('mm');
-document.getElementById('burger').onclick=()=>mm.classList.add('open');
-document.getElementById('mx').onclick=()=>mm.classList.remove('open');
-mm.querySelectorAll('a').forEach(a=>a.onclick=()=>mm.classList.remove('open'));
+const burgerBtn=document.getElementById('burger');
+const mmSet=open=>{mm.classList.toggle('open',open);burgerBtn.classList.toggle('open',open);document.body.style.overflow=open?'hidden':''};
+burgerBtn.onclick=()=>mmSet(!mm.classList.contains('open'));
+mm.querySelectorAll('a').forEach(a=>a.onclick=()=>mmSet(false));
 </script>
 </body>
 </html>
