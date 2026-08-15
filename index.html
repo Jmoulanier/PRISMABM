@@ -345,6 +345,11 @@ h2 em::after{content:"";position:absolute;left:0;bottom:.05em;width:100%;height:
 .field input::placeholder,.field textarea::placeholder{color:var(--muted)}
 .field textarea{resize:vertical;min-height:120px}
 .form .btn-pri{justify-content:center;margin-top:4px;padding:16px}
+.field-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form-status{font-family:var(--mono);font-size:12px;letter-spacing:.04em;min-height:16px;margin:0}
+.form-status.ok{color:#3ddc84}
+.form-status.err{color:#ff3445}
+.btn-pri:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
 @media(max-width:900px){.cg{grid-template-columns:1fr;gap:40px}.row{grid-template-columns:1fr}}
 
 /* footer */
@@ -505,7 +510,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
       <h2 data-es='Conocemos el pasado. <em>Construimos el futuro.</em>' data-en='We know the past. <em>We build the future.</em>'>Conocemos el pasado. <em>Construimos el futuro.</em></h2>
       <span class="about-kicker" data-es="25+ AÑOS EN BROADCAST INTERNACIONAL" data-en="25+ YEARS IN INTERNATIONAL BROADCAST">25+ AÑOS EN BROADCAST INTERNACIONAL</span>
       <p data-es="En Prisma Broadcast &amp; Media conectamos la tradición técnica con la innovación digital." data-en="At Prisma Broadcast &amp; Media, we bridge technical heritage with digital innovation.">En Prisma Broadcast &amp; Media conectamos la tradición técnica con la innovación digital.</p>
-      <p data-es="Combinamos décadas de trayectoria en el broadcast internacional con las tecnologías que definen la nueva era del contenido audiovisual. Somos una organización ágil y dinámica, respaldada por un equipo que ha vivido la evolución de la televisión desde sus inicios y que hoy transforma esa experiencia en tecnología, eficiencia y visión estratégica para la gestión deportiva." data-en="We combine decades of experience in international broadcast with the technologies shaping the new era of audiovisual content. We are an agile and dynamic organization, backed by a team that has lived the evolution of television from the ground up—transforming that expertise into technology, efficiency, and strategic vision for sports management.">Combinamos décadas de trayectoria en el broadcast internacional con las tecnologías que definen la nueva era del contenido audiovisual. Somos una organización ágil y dinámica, respaldada por un equipo que ha vivido la evolución de la televisión desde sus inicios y que hoy transforma esa experiencia en tecnología, eficiencia y visión estratégica para la gestión deportiva.</p>
+      <p data-es="Combinamos décadas de trayectoria en el broadcast internacional con las tecnologías que definen la nueva era del contenido audiovisual. Somos una organización ágil y dinámica, respaldada por un equipo que ha vivido la evolución de la televisión desde sus inicios y que hoy transforma esa experiencia en tecnología, eficiencia y visión estratégica para la gestión deportiva." data-en="We combine decades of experience in international broadcast with the technologies shaping the new era of audiovisual content. We are an agile and dynamic organization, backed by a team that has lived the evolution of television since its earliest days—transforming that expertise into technology, efficiency, and strategic vision for sports management.">Combinamos décadas de trayectoria en el broadcast internacional con las tecnologías que definen la nueva era del contenido audiovisual. Somos una organización ágil y dinámica, respaldada por un equipo que ha vivido la evolución de la televisión desde sus inicios y que hoy transforma esa experiencia en tecnología, eficiencia y visión estratégica para la gestión deportiva.</p>
       <div class="stats">
         <div class="stat"><div class="n" data-count="25" data-suffix="+">0</div><div class="l" data-es="Años de experiencia" data-en="Years experience">Años de experiencia</div></div>
         <div class="stat"><div class="n blue" data-count="8">0</div><div class="l" data-es="Soluciones" data-en="Solutions">Soluciones</div></div>
@@ -576,7 +581,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
         <span class="ix">SERVICIO 02 · CH 02</span>
         <h3>Prisma Connect</h3>
         <p class="tl" data-es="Su señal, donde la necesita, sin latencia." data-en="Your signal, where you need it, without latency.">Su señal, donde la necesita, sin latencia.</p>
-        <p data-es="Infraestructura de transporte de video punto a punto de alta fiabilidad: contribución y distribución con latencia mínima y disponibilidad 24/7 para producción en vivo." data-en="High-reliability point-to-point video transport infrastructure: contribution, distribution and retransmission with minimum latency and 24/7 availability for live production.">Infraestructura de transporte de video punto a punto de alta fiabilidad: contribución y distribución con latencia mínima y disponibilidad 24/7 para producción en vivo.</p>
+        <p data-es="Infraestructura de transporte de video punto a punto de alta fiabilidad: contribución y distribución con latencia mínima y disponibilidad 24/7 para producción en vivo." data-en="High-reliability point-to-point video transport infrastructure: contribution and distribution with minimum latency and 24/7 availability for live production.">Infraestructura de transporte de video punto a punto de alta fiabilidad: contribución y distribución con latencia mínima y disponibilidad 24/7 para producción en vivo.</p>
         <a href="#contact" class="svc-cta" data-es="Solicitar información →" data-en="Request information →">Solicitar información →</a>
       </div>
     </div>
@@ -591,7 +596,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
         <span class="ix">SERVICIO 03 · CH 03</span>
         <h3>Prisma Replay</h3>
         <p class="tl" data-es="Justicia y precisión en cada jugada." data-en="Justice and precision in every play.">Justicia y precisión en cada jugada.</p>
-        <p data-es="Sistemas de repetición instantánea y arbitraje de video para competencias profesionales: VAR y análisis de imagen en tiempo real que garantizan decisiones correctas bajo la presión del directo." data-en="Instant replay and video refereeing systems for professional competitions: VAR, hawk-eye and real-time image analysis that guarantee correct decisions under live pressure.">Sistemas de repetición instantánea y arbitraje de video para competencias profesionales: VAR y análisis de imagen en tiempo real que garantizan decisiones correctas bajo la presión del directo.</p>
+        <p data-es="Sistemas de repetición instantánea y arbitraje de video para competencias profesionales: VAR y análisis de imagen en tiempo real que garantizan decisiones correctas bajo la presión del directo." data-en="Instant replay and video refereeing systems for professional competitions: VAR and real-time image analysis that guarantee correct decisions under live pressure.">Sistemas de repetición instantánea y arbitraje de video para competencias profesionales: VAR y análisis de imagen en tiempo real que garantizan decisiones correctas bajo la presión del directo.</p>
         <a href="#contact" class="svc-cta" data-es="Solicitar información →" data-en="Request information →">Solicitar información →</a>
       </div>
     </div>
@@ -636,7 +641,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
         <span class="ix">SERVICIO 06 · CH 06</span>
         <h3>Prisma Production</h3>
         <p class="tl" data-es="La emoción del deporte, producida con inteligencia." data-en="The emotion of sport, produced with intelligence.">La emoción del deporte, producida con inteligencia.</p>
-        <p data-es="Cobertura en vivo de gran formato para eventos deportivos: unidades móviles, equipos multicámara, dirección de realizadores senior y workflows de producción remota para cualquier escala de competición." data-en="From local competitions to large-format international events: delivering end-to-end live sports coverage with mobile units, expert multi-camera crews, and scalable remote workflows.">Cobertura en vivo de gran formato para eventos deportivos: unidades móviles, equipos multicámara, dirección de realizadores senior y workflows de producción remota para cualquier escala de competición.</p>
+        <p data-es="Cobertura en vivo de gran formato para eventos deportivos: unidades móviles, equipos multicámara, dirección de realizadores senior y workflows de producción remota para cualquier escala de competición." data-en="Large-format live coverage for sporting events: mobile units, multi-camera crews, senior director oversight and remote production workflows for any scale of competition.">Cobertura en vivo de gran formato para eventos deportivos: unidades móviles, equipos multicámara, dirección de realizadores senior y workflows de producción remota para cualquier escala de competición.</p>
         <a href="#contact" class="svc-cta" data-es="Solicitar información →" data-en="Request information →">Solicitar información →</a>
       </div>
     </div>
@@ -705,15 +710,17 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
         <span class="cinfo-item"><span class="ic">☎</span> +507 6320-0533</span>
       </div>
     </div>
-    <div class="form reveal">
+    <form class="form reveal" id="contactForm" action="/contact.php" method="POST" novalidate>
       <div class="row">
-        <div class="field"><label data-es="Nombre" data-en="Name">Nombre</label><input type="text" data-ph-es="Su nombre" data-ph-en="Your name" placeholder="Su nombre"></div>
-        <div class="field"><label data-es="Correo" data-en="Email">Correo</label><input type="email" data-ph-es="correo@empresa.com" data-ph-en="email@company.com" placeholder="correo@empresa.com"></div>
+        <div class="field"><label data-es="Nombre" data-en="Name">Nombre</label><input type="text" name="name" required data-ph-es="Su nombre" data-ph-en="Your name" placeholder="Su nombre"></div>
+        <div class="field"><label data-es="Correo" data-en="Email">Correo</label><input type="email" name="email" required data-ph-es="correo@empresa.com" data-ph-en="email@company.com" placeholder="correo@empresa.com"></div>
       </div>
-      <div class="field"><label data-es="Empresa" data-en="Company">Empresa</label><input type="text" data-ph-es="Nombre de la empresa" data-ph-en="Company name" placeholder="Nombre de la empresa"></div>
-      <div class="field"><label data-es="Mensaje" data-en="Message">Mensaje</label><textarea data-ph-es="Cuéntenos sobre su proyecto…" data-ph-en="Tell us about your project…" placeholder="Cuéntenos sobre su proyecto…"></textarea></div>
-      <button class="btn btn-pri" data-es="Enviar transmisión →" data-en="Send transmission →">Enviar transmisión →</button>
-    </div>
+      <div class="field"><label data-es="Empresa" data-en="Company">Empresa</label><input type="text" name="company" data-ph-es="Nombre de la empresa" data-ph-en="Company name" placeholder="Nombre de la empresa"></div>
+      <div class="field"><label data-es="Mensaje" data-en="Message">Mensaje</label><textarea name="message" required data-ph-es="Cuéntenos sobre su proyecto…" data-ph-en="Tell us about your project…" placeholder="Cuéntenos sobre su proyecto…"></textarea></div>
+      <div class="field field-hp" aria-hidden="true"><label for="website">Website</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></div>
+      <p class="form-status" id="formStatus" data-es="" data-en="" role="status" aria-live="polite"></p>
+      <button class="btn btn-pri" type="submit" id="formSubmit" data-es="Enviar transmisión →" data-en="Send transmission →">Enviar transmisión →</button>
+    </form>
   </div>
 </section>
 
@@ -961,6 +968,48 @@ function setLang(l){document.documentElement.lang=l;esB.classList.toggle('on',l=
   document.querySelectorAll('[data-es]').forEach(el=>el.innerHTML=el.getAttribute('data-'+l));
   document.querySelectorAll('[data-ph-es]').forEach(el=>el.placeholder=el.getAttribute('data-ph-'+l));}
 esB.onclick=()=>setLang('es');enB.onclick=()=>setLang('en');
+
+// contact form
+(()=>{
+  const form=document.getElementById('contactForm');
+  if(!form)return;
+  const status=document.getElementById('formStatus');
+  const submitBtn=document.getElementById('formSubmit');
+  const MSG={
+    sending:{es:'Enviando…',en:'Sending…'},
+    ok:{es:'Mensaje enviado. Le responderemos pronto.',en:'Message sent. We will get back to you soon.'},
+    err:{es:'No se pudo enviar. Intente de nuevo o escriba a ventas@prismabm.com',en:'Could not send. Please try again or email ventas@prismabm.com'},
+    invalid:{es:'Complete nombre, correo y mensaje.',en:'Please fill in name, email and message.'}
+  };
+  const showStatus=(key,cls)=>{
+    const m=MSG[key],l=document.documentElement.lang==='en'?'en':'es';
+    status.setAttribute('data-es',m.es);status.setAttribute('data-en',m.en);
+    status.textContent=m[l];status.className='form-status'+(cls?' '+cls:'');
+  };
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const data=new FormData(form);
+    if(!form.querySelector('[name=name]').value.trim()||!form.querySelector('[name=email]').value.trim()||!form.querySelector('[name=message]').value.trim()){
+      showStatus('invalid','err');return;
+    }
+    submitBtn.disabled=true;
+    showStatus('sending','');
+    try{
+      const res=await fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}});
+      const json=await res.json().catch(()=>null);
+      if(res.ok&&json&&json.ok){
+        showStatus('ok','ok');
+        form.reset();
+      }else{
+        showStatus('err','err');
+      }
+    }catch(err){
+      showStatus('err','err');
+    }finally{
+      submitBtn.disabled=false;
+    }
+  });
+})();
 
 // count-up
 function countUp(el){const t=parseFloat(el.dataset.count),suf=el.dataset.suffix||'',dec=(t%1!==0)?2:0;
