@@ -407,6 +407,70 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
 .mm.open .mm-foot{opacity:1;transform:none;transition-delay:.38s}
 .mm-foot .btn{justify-content:center}
 .mm-foot .mm-sig{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--muted);text-align:center}
+
+/* ───────── MODAL DE CONFIRMACION DE ENVIO ───────── */
+.pxm-ov{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+  overflow-y:auto;padding:clamp(24px,7vh,80px) 20px;background:rgba(8,9,12,.965);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  opacity:0;visibility:hidden;transition:opacity .34s var(--e),visibility 0s linear .34s}
+.pxm-ov.is-on{opacity:1;visibility:visible;transition:opacity .34s var(--e)}
+@supports not (backdrop-filter:blur(2px)){.pxm-ov{background:rgba(8,9,12,.985)}}
+.pxm-ov::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0,rgba(255,255,255,.02) 1px,transparent 2px,transparent 4px)}
+.pxm-frame{width:100%;max-width:720px;margin:auto;position:relative;z-index:2;
+  padding:clamp(40px,6vw,72px) clamp(24px,5vw,60px);text-align:left}
+.pxm-frame:focus{outline:none}
+.pxm-corner{position:absolute;width:26px;height:26px;border:1px solid rgba(255,255,255,.3);
+  opacity:0;transition:opacity .5s var(--e) .4s}
+.pxm-ov.is-on .pxm-corner{opacity:1}
+.pxm-corner.tl{top:0;left:0;border-right:0;border-bottom:0}
+.pxm-corner.tr{top:0;right:0;border-left:0;border-bottom:0}
+.pxm-corner.bl{bottom:0;left:0;border-right:0;border-top:0}
+.pxm-corner.br{bottom:0;right:0;border-left:0;border-top:0}
+.pxm-kick,.pxm-h,.pxm-lede,.pxm-back,.pxm-rule,.pxm-folio{opacity:0;transform:translateY(18px);
+  transition:opacity .52s var(--e),transform .52s var(--e)}
+.pxm-ov.is-on .pxm-kick{opacity:1;transform:none;transition-delay:.06s}
+.pxm-ov.is-on .pxm-h{opacity:1;transform:none;transition-delay:.13s}
+.pxm-ov.is-on .pxm-lede{opacity:1;transform:none;transition-delay:.2s}
+.pxm-ov.is-on .pxm-back{opacity:1;transform:none;transition-delay:.27s}
+.pxm-ov.is-on .pxm-rule{opacity:1;transform:none;transition-delay:.33s}
+.pxm-ov.is-on .pxm-folio{opacity:1;transform:none;transition-delay:.33s}
+.pxm-kick{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10.5px;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:30px;padding-right:44px}
+.pxm-kick::before{content:"//";color:var(--blue);font-weight:700}
+.pxm-kick .live-dot{margin-left:auto}
+.pxm-h{font-family:var(--disp);font-weight:800;text-transform:uppercase;
+  font-size:clamp(34px,8.2vw,76px);line-height:.92;letter-spacing:-.02em;color:var(--ink);margin:0 0 24px}
+.pxm-h em{font-style:normal;color:#fff;position:relative}
+.pxm-h em::after{content:"";position:absolute;left:0;bottom:.05em;width:100%;height:2px;background:var(--blue);
+  transform:scaleX(0);transform-origin:left;transition:transform .52s var(--e2) .38s}
+.pxm-ov.is-on .pxm-h em::after{transform:scaleX(1)}
+@media(min-width:768px){.pxm-h em::after{height:3px}}
+.pxm-lede{font-family:var(--sans);font-size:clamp(15px,1.2vw,16.5px);font-weight:500;line-height:1.75;
+  color:var(--ink-soft);max-width:46ch;margin:0 0 40px}
+.pxm-back{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--blue);
+  display:inline-flex;align-items:center;gap:8px;border:1px solid var(--blue-deep);padding:10px 18px;
+  background:none;cursor:pointer;text-transform:uppercase;transition:all .25s var(--e),opacity .52s var(--e),transform .52s var(--e)}
+.pxm-back:hover{background:var(--blue);color:#fff;gap:14px}
+.pxm-rule{height:1px;background:var(--line);width:100%;margin-top:44px}
+.pxm-folio{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:16px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.pxm-folio a{color:var(--muted);text-decoration:none;transition:color .2s}
+.pxm-folio a:hover{color:#fff}
+.pxm-close{position:absolute;top:clamp(10px,2vw,18px);right:clamp(10px,2vw,18px);width:44px;height:44px;
+  display:grid;place-items:center;background:none;border:0;cursor:pointer;font-family:var(--mono);
+  font-size:17px;line-height:1;color:var(--muted);transition:color .2s}
+.pxm-close:hover{color:#fff}
+.pxm-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.pxm-close:focus-visible,.pxm-back:focus-visible,.pxm-folio a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+@media(max-width:640px){.pxm-corner{width:16px;height:16px}}
+@media(max-height:560px){.pxm-ov{align-items:flex-start}.pxm-frame{padding-top:28px;padding-bottom:28px}
+  .pxm-kick{margin-bottom:18px}.pxm-h{margin-bottom:14px}.pxm-lede{margin-bottom:24px}.pxm-rule{margin-top:26px}}
+@media(prefers-reduced-motion:reduce){
+  .pxm-ov,.pxm-ov *{transition-duration:.01ms !important;transition-delay:0ms !important;animation:none !important}
+  .pxm-kick,.pxm-h,.pxm-lede,.pxm-back,.pxm-rule,.pxm-folio,.pxm-corner{opacity:1;transform:none}
+  .pxm-h em::after{transform:scaleX(1)}
+  .pxm-ov .live-dot{opacity:1;box-shadow:none}}
 </style>
 </head>
 <body>
@@ -710,7 +774,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
         <span class="cinfo-item"><span class="ic">☎</span> +507 6320-0533</span>
       </div>
     </div>
-    <form class="form reveal" id="contactForm" action="/contact.php" method="POST" novalidate>
+    <form class="form reveal" id="contactForm" action="/lead.php" method="POST" novalidate>
       <div class="row">
         <div class="field"><label data-es="Nombre" data-en="Name">Nombre</label><input type="text" name="name" required data-ph-es="Su nombre" data-ph-en="Your name" placeholder="Su nombre"></div>
         <div class="field"><label data-es="Correo" data-en="Email">Correo</label><input type="email" name="email" required data-ph-es="correo@empresa.com" data-ph-en="email@company.com" placeholder="correo@empresa.com"></div>
@@ -746,6 +810,28 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-
   </div>
   <a href="#hero" class="back-top" id="backTop" aria-label="Volver al inicio">↑</a>
 </footer>
+
+<!-- MODAL DE CONFIRMACION DE ENVIO -->
+<div class="pxm-ov" id="pxmModal">
+  <div class="pxm-frame" id="pxmFrame" role="dialog" aria-modal="true" aria-labelledby="pxmTitle" aria-describedby="pxmLede" tabindex="-1">
+    <span class="pxm-corner tl" aria-hidden="true"></span>
+    <span class="pxm-corner tr" aria-hidden="true"></span>
+    <span class="pxm-corner bl" aria-hidden="true"></span>
+    <span class="pxm-corner br" aria-hidden="true"></span>
+    <button class="pxm-close" id="pxmClose" type="button">
+      <span aria-hidden="true">×</span><span class="pxm-sr" data-es="Cerrar" data-en="Close">Cerrar</span>
+    </button>
+    <span class="pxm-kick" data-es='Señal recibida<span class="live-dot"></span>' data-en='Signal received<span class="live-dot"></span>'>Señal recibida<span class="live-dot"></span></span>
+    <h2 class="pxm-h" id="pxmTitle" data-es='Estamos al <em>aire.</em>' data-en='We’re on <em>air.</em>'>Estamos al <em>aire.</em></h2>
+    <p class="pxm-lede" id="pxmLede" data-es="Su mensaje entró a nuestra sala de control. Un especialista de Prisma le responderá dentro de las próximas 24 horas hábiles." data-en="Your message is now in our control room. A Prisma specialist will get back to you within the next 24 business hours.">Su mensaje entró a nuestra sala de control. Un especialista de Prisma le responderá dentro de las próximas 24 horas hábiles.</p>
+    <button class="pxm-back" id="pxmBack" type="button" data-es="← Volver al sitio" data-en="← Back to site">← Volver al sitio</button>
+    <div class="pxm-rule"></div>
+    <div class="pxm-folio">
+      <span id="pxmTx"></span>
+      <a href="mailto:ventas@prismabm.com" data-es="ventas@prismabm.com" data-en="ventas@prismabm.com">ventas@prismabm.com</a>
+    </div>
+  </div>
+</div>
 
 <script>
 // nav
@@ -969,6 +1055,53 @@ function setLang(l){document.documentElement.lang=l;esB.classList.toggle('on',l=
   document.querySelectorAll('[data-ph-es]').forEach(el=>el.placeholder=el.getAttribute('data-ph-'+l));}
 esB.onclick=()=>setLang('es');enB.onclick=()=>setLang('en');
 
+// modal de confirmacion de envio
+const pxm=(()=>{
+  const ov=document.getElementById('pxmModal');
+  if(!ov)return{open:()=>{}};
+  const frame=document.getElementById('pxmFrame'),closeBtn=document.getElementById('pxmClose'),
+        backBtn=document.getElementById('pxmBack'),tx=document.getElementById('pxmTx');
+  let isOpen=false,prevOverflow='',downOnOv=false;
+  const focusables=()=>[closeBtn,backBtn,ov.querySelector('.pxm-folio a')].filter(Boolean);
+  const stamp=()=>{const d=new Date(),p=n=>String(n).padStart(2,'0');
+    return'TX · '+d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' · '+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds())};
+  const onKey=e=>{
+    if(!isOpen)return;
+    if(e.key==='Escape'){e.preventDefault();close();return}
+    if(e.key!=='Tab')return;
+    const f=focusables();if(!f.length)return;
+    const first=f[0],last=f[f.length-1];
+    if(e.shiftKey&&(document.activeElement===first||document.activeElement===frame)){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+  };
+  function open(){
+    if(isOpen)return;
+    isOpen=true;
+    if(tx)tx.textContent=stamp();
+    prevOverflow=document.body.style.overflow;
+    document.body.style.overflow='hidden';
+    ov.classList.add('is-on');
+    addEventListener('keydown',onKey);
+    requestAnimationFrame(()=>frame.focus());
+  }
+  function close(){
+    if(!isOpen)return;
+    isOpen=false;
+    ov.classList.remove('is-on');
+    removeEventListener('keydown',onKey);
+    // el menu movil tambien controla el overflow: si esta abierto, respetarlo
+    const mmEl=document.getElementById('mm');
+    document.body.style.overflow=(mmEl&&mmEl.classList.contains('open'))?'hidden':prevOverflow;
+    // preventScroll: el sitio usa scroll-behavior:smooth y focus() provocaria un salto animado
+    const sb=document.getElementById('formSubmit');if(sb)sb.focus({preventScroll:true});
+  }
+  closeBtn.addEventListener('click',close);
+  backBtn.addEventListener('click',close);
+  ov.addEventListener('mousedown',e=>{downOnOv=(e.target===ov)});
+  ov.addEventListener('click',e=>{if(e.target===ov&&downOnOv)close();downOnOv=false});
+  return{open,close};
+})();
+
 // contact form
 (()=>{
   const form=document.getElementById('contactForm');
@@ -994,12 +1127,24 @@ esB.onclick=()=>setLang('es');enB.onclick=()=>setLang('en');
     }
     submitBtn.disabled=true;
     showStatus('sending','');
+    const post=()=>fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'},credentials:'same-origin'});
     try{
-      const res=await fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}});
-      const json=await res.json().catch(()=>null);
+      let res=await post();
+      let txt=await res.text();
+      // El WAF del hosting puede responder un reto anti-bot en vez de JSON: un
+      // bloque de script que hace document.cookie = "humans_XXXX=1" y recarga.
+      // fetch() no ejecuta ese script, asi que lo resolvemos aqui y reintentamos.
+      const chal=txt.match(/document\.cookie\s*=\s*"([^"]+)"/);
+      if(chal){
+        document.cookie=chal[1]+'; path=/';
+        res=await post();
+        txt=await res.text();
+      }
+      let json=null;try{json=JSON.parse(txt)}catch(e){}
       if(res.ok&&json&&json.ok){
         showStatus('ok','ok');
         form.reset();
+        pxm.open();
       }else{
         showStatus('err','err');
       }
